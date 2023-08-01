@@ -1,8 +1,8 @@
 package ru.practicum.tasks.manager;
 
-import ru.practicum.tasks.epics.Epic;
-import ru.practicum.tasks.status.Status;
-import ru.practicum.tasks.subtask.Subtask;
+import ru.practicum.tasks.task.Epic;
+import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
 import java.util.ArrayList;
@@ -24,31 +24,40 @@ public class Manager {
     }
 
     //Получение по идентификатору.
-    public void getTaskById(Integer uniqueId) {
+    public ArrayList<Task> getTaskById(Integer uniqueId) {
+        ArrayList<Task> taskWithCorrectId = new ArrayList<>();
         for (Task task : tasks) {
             if (Objects.equals(task.getUniqueId(), uniqueId)) {
                 System.out.println(" ");
                 System.out.println("Задача с ID: " + uniqueId + " найдена!");
-                getTasks();
-                return;
+                taskWithCorrectId.add(task);
             }
         }
+        return taskWithCorrectId;
+    }
+
+    public ArrayList<Epic> getEpicById(Integer uniqueId){
+        ArrayList<Epic> epicWithCorrectId = new ArrayList<>();
         for (Epic epic : epics) {
             if (Objects.equals(epic.getUniqueId(), uniqueId)) {
                 System.out.println(" ");
                 System.out.println("Эпик с ID: " + uniqueId + " найден!");
-                getEpics();
-                return;
+                epicWithCorrectId.add(epic);
             }
         }
+        return epicWithCorrectId;
+    }
+
+    public ArrayList<Subtask> getSubtaskById (Integer uniqueId) {
+        ArrayList<Subtask> subtaskWithCorrectId = new ArrayList<>();
         for (Subtask subtask : subtasks) {
             if (Objects.equals(subtask.getUniqueId(), uniqueId)) {
                 System.out.println(" ");
                 System.out.println("Подзадача с ID: " + uniqueId + " найдена!");
-                getSubtasks();
-                return;
+                subtaskWithCorrectId.add(subtask);
             }
         }
+        return subtaskWithCorrectId;
     }
 
     //Удаление по идентификатору.

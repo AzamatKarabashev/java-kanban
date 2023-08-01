@@ -1,6 +1,8 @@
 package ru.practicum.tasks.task;
 
-import ru.practicum.tasks.status.Status;
+import ru.practicum.tasks.model.Status;
+
+import java.util.Objects;
 
 public class Task {
     protected String taskName;
@@ -18,8 +20,17 @@ public class Task {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(taskName, task.taskName) && Objects.equals(taskDesc, task.taskDesc)
+                && Objects.equals(uniqueId, task.uniqueId) && status == task.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(taskName, taskDesc, uniqueId, status);
     }
 
     public String getTaskName() {

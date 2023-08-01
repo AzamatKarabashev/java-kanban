@@ -1,9 +1,9 @@
 package ru.practicum.tasks.tester;
 
-import ru.practicum.tasks.epics.Epic;
+import ru.practicum.tasks.task.Epic;
 import ru.practicum.tasks.manager.Manager;
-import ru.practicum.tasks.status.Status;
-import ru.practicum.tasks.subtask.Subtask;
+import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
 import java.util.ArrayList;
