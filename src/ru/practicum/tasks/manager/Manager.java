@@ -24,40 +24,37 @@ public class Manager {
     }
 
     //Получение по идентификатору.
-    public ArrayList<Task> getTaskById(Integer uniqueId) {
-        ArrayList<Task> taskWithCorrectId = new ArrayList<>();
+    public Task getTaskById(Integer uniqueId) {
         for (Task task : tasks) {
             if (Objects.equals(task.getUniqueId(), uniqueId)) {
                 System.out.println(" ");
                 System.out.println("Задача с ID: " + uniqueId + " найдена!");
-                taskWithCorrectId.add(task);
+                return task;
             }
         }
-        return taskWithCorrectId;
+        return null;
     }
 
-    public ArrayList<Epic> getEpicById(Integer uniqueId){
-        ArrayList<Epic> epicWithCorrectId = new ArrayList<>();
+    public Epic getEpicById(Integer uniqueId) {
         for (Epic epic : epics) {
             if (Objects.equals(epic.getUniqueId(), uniqueId)) {
                 System.out.println(" ");
                 System.out.println("Эпик с ID: " + uniqueId + " найден!");
-                epicWithCorrectId.add(epic);
+                return epic;
             }
         }
-        return epicWithCorrectId;
+        return null;
     }
 
-    public ArrayList<Subtask> getSubtaskById (Integer uniqueId) {
-        ArrayList<Subtask> subtaskWithCorrectId = new ArrayList<>();
+    public Subtask getSubtaskById(Integer uniqueId) {
         for (Subtask subtask : subtasks) {
             if (Objects.equals(subtask.getUniqueId(), uniqueId)) {
                 System.out.println(" ");
                 System.out.println("Подзадача с ID: " + uniqueId + " найдена!");
-                subtaskWithCorrectId.add(subtask);
+                return subtask;
             }
         }
-        return subtaskWithCorrectId;
+        return null;
     }
 
     //Удаление по идентификатору.
