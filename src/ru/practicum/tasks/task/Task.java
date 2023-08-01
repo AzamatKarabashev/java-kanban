@@ -33,6 +33,16 @@ public class Task {
         return Objects.hash(taskName, taskDesc, uniqueId, status);
     }
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskName='" + taskName + '\'' +
+                ", taskDesc='" + taskDesc + '\'' +
+                ", uniqueId=" + uniqueId +
+                ", status=" + status +
+                '}';
+    }
+
     public String getTaskName() {
         return taskName;
     }
@@ -56,6 +66,7 @@ public class Task {
     public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
     }
+
     public Status getStatus() {
         return status;
     }

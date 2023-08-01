@@ -20,4 +20,14 @@ public class Epic extends Task {
     public int hashCode() {
         return super.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "taskName='" + taskName + '\'' +
+                ", taskDesc='" + taskDesc + '\'' +
+                ", uniqueId=" + uniqueId +
+                ", status=" + status +
+                '}';
+    }
 }
