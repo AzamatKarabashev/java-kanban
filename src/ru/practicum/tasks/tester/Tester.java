@@ -34,7 +34,7 @@ public class Tester {
 
     public void test() {
         Manager manager = new Manager();
-        Epic epic = new Epic();
+
 
         System.out.println("Тесты: создаем и печатаем задачи/эпики/подзадачи.\n");
 
@@ -51,12 +51,12 @@ public class Tester {
         epicPrinter(epic1, epic1Id);
 
         Subtask subtask1 = new Subtask("Купить будильник", "Важная деталь", Status.DONE, epic1Id);
-        int subtask1Id = manager.addNewSubtask(subtask1);
+        int subtask1Id = manager.addNewSubtask(subtask1, epic1);
         subtaskPrinter(subtask1, subtask1Id);
 
         Subtask subtask2 = new Subtask("Запрет на соцсети после 22 часов",
                 "Действие осуществляется после покупки будильника", Status.DONE, epic1Id);
-        int subtask2Id = manager.addNewSubtask(subtask2);
+        int subtask2Id = manager.addNewSubtask(subtask2, epic1);
         subtaskPrinter(subtask2, subtask2Id);
 
         Epic epic2 = new Epic("Обрадовать жену", "Хочешь похвалы?", Status.NEW);
@@ -65,7 +65,7 @@ public class Tester {
 
         Subtask subtask3 = new Subtask("Починить кран", "Тот день, когда белоручка взял инструменты",
                 Status.NEW, epic2Id);
-        int subtask3Id = manager.addNewSubtask(subtask3);
+        int subtask3Id = manager.addNewSubtask(subtask3, epic2);
         subtaskPrinter(subtask3, subtask3Id);
 
         System.out.println("Тесты: печатаем список всех задач для проверки.\n");
@@ -106,6 +106,10 @@ public class Tester {
         for (Task task : manager.getTasks()) {
             System.out.println(task);
             System.out.println(" ");
+        }
+
+        for (Integer integer : epic1.getSubtasksIdList()) {
+            System.out.println(integer);
         }
     }
 }

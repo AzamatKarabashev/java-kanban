@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Manager {
     private ArrayList<Task> tasks = new ArrayList<>();
-    private ArrayList<Epic> epics = new ArrayList<>();
+    private ArrayList<Epic> epics = new ArrayList<>(10);
     private ArrayList<Subtask> subtasks = new ArrayList<>();
     private Integer id = 0;
 
@@ -146,14 +146,13 @@ public class Manager {
 
     //Создание. Сам объект должен передаваться в качестве параметра.
     //Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
-    public Integer addNewSubtask(Subtask subtask) {
-        if (subtask == null) {
-            System.out.println("Подзадачу невозможно сохранить");
-            return null;
-        }
+    public Integer addNewSubtask(Subtask subtask, Epic epic) {
+        int epicId = epics.indexOf(epic);
+        Epic epicL = epics.get(epicId);
         subtask.setUniqueId(generateId());
         subtasks.add(subtask);
         updateStatus(subtask.getEpicId());
+        epicL.addSubtaskIdToList(subtask.getUniqueId());
         return subtask.getUniqueId();
     }
 
