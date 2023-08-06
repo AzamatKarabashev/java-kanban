@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Manager {
     private ArrayList<Task> tasks = new ArrayList<>();
-    private ArrayList<Epic> epics = new ArrayList<>(10);
+    private ArrayList<Epic> epics = new ArrayList<>();
     private ArrayList<Subtask> subtasks = new ArrayList<>();
     private Integer id = 0;
 
