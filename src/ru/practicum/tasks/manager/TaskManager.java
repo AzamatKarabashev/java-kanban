@@ -4,7 +4,7 @@ import ru.practicum.tasks.task.Epic;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -27,7 +27,7 @@ public interface TaskManager {
     void removeSubtask(Integer uniqueId);
 
     //Получение списка всех подзадач определённого эпика.
-    ArrayList<Subtask> getEpicsSubtasks(Integer uniqueId);
+    List<Subtask> getEpicsSubtasks(Integer uniqueId);
 
     //Создание. Сам объект должен передаваться в качестве параметра.
     //Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
@@ -52,7 +52,8 @@ public interface TaskManager {
     Integer generateId();
 
     //Управление статусами осуществляется по следующему правилу:
-    //Менеджер сам не выбирает статус для задачи. Информация о нём приходит менеджеру вместе с информацией о самой задаче.
+    //Менеджер сам не выбирает статус для задачи. Информация о нём
+    //приходит менеджеру вместе с информацией о самой задаче.
     //По этим данным в одних случаях он будет сохранять статус, в других будет рассчитывать.
     //Для эпиков:
     //если у эпика нет подзадач или все они имеют статус NEW, то статус должен быть NEW.
@@ -60,5 +61,19 @@ public interface TaskManager {
     //во всех остальных случаях статус должен быть IN_PROGRESS.
 
     void updateStatus(Integer uniqueId);
+
+    //добавляем сюда методы get так как теперь используем интерфейс
+
+    List<Task> getTasks();
+
+    void setTasks(List<Task> tasks);
+
+    List<Epic> getEpics();
+
+    void setEpics(List<Epic> epics);
+
+    List<Subtask> getSubtasks();
+
+    void setSubtasks(List<Subtask> subtasks);
 
 }

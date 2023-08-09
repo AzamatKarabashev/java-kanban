@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     private List<Epic> epics = new ArrayList<>();
     private List<Subtask> subtasks = new ArrayList<>();
     private Integer id = 0;
-    HistoryManager inMemoryHistoryManager = getDefaultHistory();
+    private final HistoryManager inMemoryHistoryManager = getDefaultHistory();
 
     @Override
     public void printHistory() {
@@ -112,8 +112,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getEpicsSubtasks(Integer uniqueId) {
-        ArrayList<Subtask> epicsSubtasks = new ArrayList<>();
+    public List<Subtask> getEpicsSubtasks(Integer uniqueId) {
+        List<Subtask> epicsSubtasks = new ArrayList<>();
         for (Subtask subtask : subtasks) {
             if (Objects.equals(subtask.getEpicId(), uniqueId)) {
                 epicsSubtasks.add(subtask);
@@ -183,7 +183,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask newSubtask) {
-        ArrayList<Subtask> checkEpic = getEpicsSubtasks(newSubtask.getEpicId());
+        List<Subtask> checkEpic = getEpicsSubtasks(newSubtask.getEpicId());
         if (checkEpic.isEmpty()) {
             System.out.println("Эпика к котрому вы хотите создать подзадачу нет");
             return;
@@ -213,7 +213,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (Epic epic : epics) {
             if (Objects.equals(epic.getUniqueId(), uniqueId)) {
-                ArrayList<Subtask> epicSubtasks = getEpicsSubtasks(uniqueId);
+                List<Subtask> epicSubtasks = getEpicsSubtasks(uniqueId);
                 if (epicSubtasks.isEmpty()) {
                     epic.setStatus(Status.NEW);
                     return;
@@ -233,26 +233,32 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public List<Task> getTasks() {
         return tasks;
     }
 
+    @Override
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 
+    @Override
     public List<Epic> getEpics() {
         return epics;
     }
 
+    @Override
     public void setEpics(List<Epic> epics) {
         this.epics = epics;
     }
 
+    @Override
     public List<Subtask> getSubtasks() {
         return subtasks;
     }
 
+    @Override
     public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks = subtasks;
     }

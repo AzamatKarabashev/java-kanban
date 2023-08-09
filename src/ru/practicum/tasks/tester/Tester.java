@@ -1,13 +1,14 @@
 package ru.practicum.tasks.tester;
 
+import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.manager.InMemoryTaskManager;
 import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static ru.practicum.tasks.manager.Managers.getDefault;
 
 public class Tester {
 
@@ -34,7 +35,8 @@ public class Tester {
     }
 
     public void test() {
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+
+        TaskManager inMemoryTaskManager = getDefault();
 
         System.out.println("Тесты: создаем и печатаем задачи/эпики/подзадачи.\n");
 
@@ -87,7 +89,7 @@ public class Tester {
         }
 
         System.out.println("\nТесты: печатаем списки подзадач привязанных к эпику.\n");
-        ArrayList<Subtask> epic1Subtasks = inMemoryTaskManager.getEpicsSubtasks(epic1Id);
+        List<Subtask> epic1Subtasks = inMemoryTaskManager.getEpicsSubtasks(epic1Id);
         for (Subtask epic1Subtask : epic1Subtasks) {
             System.out.println(epic1Subtask);
             System.out.println(" ");
@@ -142,15 +144,6 @@ public class Tester {
                 + ". теперь его статус: " + epic2.getStatus() + "\n");
         System.out.println();
 
-        for (Task task : inMemoryTaskManager.getTasks()) {
-            System.out.println(task);
-        }
-        for (Epic epic : inMemoryTaskManager.getEpics()) {
-            System.out.println(epic);
-        }
-        for (Subtask subtask : inMemoryTaskManager.getSubtasks()) {
-            System.out.println(subtask);
-        }
         inMemoryTaskManager.getTaskById(task1Id);
         inMemoryTaskManager.getEpicById(epic2Id);
         inMemoryTaskManager.getSubtaskById(subtask3Id);
