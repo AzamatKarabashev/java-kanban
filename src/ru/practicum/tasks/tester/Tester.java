@@ -120,11 +120,11 @@ public class Tester {
         }
 
         System.out.println("\nТесты: проверка работы методов удаления.");
-        inMemoryTaskManager.removeTask(task2Id);
+        inMemoryTaskManager.removeTaskById(task2Id);
         System.out.println(" ");
 
         System.out.println("\nТесты: проверка удаления эпика, после чего должны удалится его сабтаски.");
-        inMemoryTaskManager.removeEpic(epic1Id);
+        inMemoryTaskManager.removeEpicById(epic1Id);
         System.out.println(" ");
         System.out.println("После удаления эпика в списке сабтасок осталось: ");
         for (Subtask subtask : inMemoryTaskManager.getSubtasks()) {
@@ -139,18 +139,104 @@ public class Tester {
             System.out.println(subtask);
         }
         List<Subtask> checkWithDebug = inMemoryTaskManager.getSubtasks();
-        inMemoryTaskManager.removeSubtask(subtask3Id);
+        inMemoryTaskManager.removeSubtaskById(subtask3Id);
         System.out.println("\nМы удалили сабтаски первого эпика с ID: " + epic2.getUniqueId()
                 + ". теперь его статус: " + epic2.getStatus() + "\n");
         System.out.println();
 
-        inMemoryTaskManager.getTaskById(task1Id);
-        inMemoryTaskManager.getEpicById(epic2Id);
-        inMemoryTaskManager.getSubtaskById(subtask3Id);
+        /*
+        Тестирование работы программы
+        После написания менеджера истории проверьте его работу:
+        создайте две задачи, эпик с тремя подзадачами и эпик без подзадач;
+        запросите созданные задачи несколько раз в разном порядке;
+        после каждого запроса выведите историю и убедитесь, что в ней нет повторов;
+        удалите задачу, которая есть в истории, и проверьте, что при печати она не будет выводиться;
+        удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.
+        Интересного вам программирования!
+         */
 
-        System.out.println("\nПытаемся распечатать историю просмотра задач\n");
+        System.out.println("\nТесты: тестируем работу менеджера истории просмотра!\n");
+        Task taskForTestHistoryManager1 = new Task("Первая таска для теста менеджера истории",
+                "Описание первой тестовой таски", Status.NEW);
+        int taskForTestHistoryManager1Id = inMemoryTaskManager.addNewTask(taskForTestHistoryManager1);
+        taskPrinter(taskForTestHistoryManager1, taskForTestHistoryManager1Id);
+
+        Task taskForTestHistoryManager2 = new Task("Вторая таска для теста менеджера истории",
+                "Описание второй тестовой таски", Status.NEW);
+        int taskForTestHistoryManager2Id = inMemoryTaskManager.addNewTask(taskForTestHistoryManager2);
+        taskPrinter(taskForTestHistoryManager2, taskForTestHistoryManager2Id);
+
+        Epic epicForTestHistoryManager1 = new Epic("Первый эпик для теста менеджера истории с тремя сабтасками",
+                "Описание первого тестового эпика", Status.NEW);
+        int epicForTestHistoryManager1Id = inMemoryTaskManager.addNewEpic(epicForTestHistoryManager1);
+        epicPrinter(epicForTestHistoryManager1, epicForTestHistoryManager1Id);
+
+        Subtask firstTestSubtaskOfTestEpic = new Subtask("Первая сабтаска эпика", "Описание",
+                Status.DONE, epicForTestHistoryManager1Id);
+        int firstTestSubtaskOfTestEpicId = inMemoryTaskManager.addNewSubtask(firstTestSubtaskOfTestEpic,
+                epicForTestHistoryManager1);
+        subtaskPrinter(firstTestSubtaskOfTestEpic, firstTestSubtaskOfTestEpicId);
+
+        Subtask secondTestSubtaskOfTestEpic = new Subtask("Вторая сабтаска эпика", "Описание",
+                Status.DONE, epicForTestHistoryManager1Id);
+        int secondTestSubtaskOfTestEpicId = inMemoryTaskManager.addNewSubtask(secondTestSubtaskOfTestEpic,
+                epicForTestHistoryManager1);
+        subtaskPrinter(secondTestSubtaskOfTestEpic, secondTestSubtaskOfTestEpicId);
+
+        Subtask thirdTestSubtaskOfTestEpic = new Subtask("Третья сабтаска эпика", "Описание",
+                Status.DONE, epicForTestHistoryManager1Id);
+        int thirdTestSubtaskOfTestEpicId = inMemoryTaskManager.addNewSubtask(thirdTestSubtaskOfTestEpic,
+                epicForTestHistoryManager1);
+        subtaskPrinter(thirdTestSubtaskOfTestEpic, thirdTestSubtaskOfTestEpicId);
+
+        Epic epicForTestHistoryManager2 = new Epic("Второй эпик для теста менеджера истории без сабтасок",
+                "Описание первого тестового эпика", Status.NEW);
+        int epicForTestHistoryManager2Id = inMemoryTaskManager.addNewEpic(epicForTestHistoryManager2);
+        epicPrinter(epicForTestHistoryManager2, epicForTestHistoryManager2Id);
+
+        System.out.println("\nВызвали таску 1 (Количество элементов ожидаемых в истории просмотра: 1)\n");
+        inMemoryTaskManager.getTaskById(taskForTestHistoryManager1Id);
         inMemoryTaskManager.printHistory();
-        inMemoryTaskManager.getEpics();
 
+        System.out.println("\nВызвали таску 2 (Количество элементов ожидаемых в истории просмотра: 2)\n");
+        inMemoryTaskManager.getTaskById(taskForTestHistoryManager2Id);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали таску 1 повторно (Количество элементов ожидаемых в истории просмотра: 2)\n");
+        inMemoryTaskManager.getTaskById(taskForTestHistoryManager1Id);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали эпик 1 (Количество элементов ожидаемых в истории просмотра: 3)\n");
+        inMemoryTaskManager.getEpicById(epicForTestHistoryManager1Id);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали эпик 2 (Количество элементов ожидаемых в истории просмотра: 4)\n");
+        inMemoryTaskManager.getEpicById(epicForTestHistoryManager2Id);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали эпик 1 повторно (Количество элементов ожидаемых в истории просмотра: 4)\n");
+        inMemoryTaskManager.getEpicById(epicForTestHistoryManager1Id);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали сабтаску 2 (Количество элементов ожидаемых в истории просмотра: 5)\n");
+        inMemoryTaskManager.getSubtaskById(secondTestSubtaskOfTestEpicId);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали сабтаску 1 (Количество элементов ожидаемых в истории просмотра: 6)\n");
+        inMemoryTaskManager.getSubtaskById(firstTestSubtaskOfTestEpicId);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nВызвали сабтаску 3 (Количество элементов ожидаемых в истории просмотра: 7)\n");
+        inMemoryTaskManager.getSubtaskById(thirdTestSubtaskOfTestEpicId);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nУдалили таску 1 (Количество элементов ожидаемых в истории просмотра: 6)\n");
+        inMemoryTaskManager.removeTaskById(taskForTestHistoryManager1Id);
+        inMemoryTaskManager.printHistory();
+
+        System.out.println("\nУдалили эпик 1 с тремя подвязанными к нему сабтасками" +
+                "(Количество элементов ожидаемых в истории просмотра: 2)\n");
+        inMemoryTaskManager.removeEpicById(epicForTestHistoryManager1Id);
+        inMemoryTaskManager.printHistory();
     }
 }

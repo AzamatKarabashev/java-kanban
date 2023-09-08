@@ -19,6 +19,10 @@ public class InMemoryTaskManager implements TaskManager {
     private Integer id = 0;
     private final HistoryManager inMemoryHistoryManager = getDefaultHistory();
 
+    /**
+     * Метод печатает историю просмотра задач из
+     * InMemoryHistoryManager
+     */
     @Override
     public void printHistory() {
         for (Task task : inMemoryHistoryManager.getHistory()) {
@@ -26,91 +30,131 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    /**
+     * Удаление всех задач/эпиков/подзадач
+     * из соответствующих списков
+     */
     @Override
     public void removeAllTasks() {
         tasks.clear();
         epics.clear();
         subtasks.clear();
-        System.out.println("Все задачи успешно удалены");
     }
 
+    /**
+     * Получение таски по ID;
+     * метод пробегается по всем таскам,
+     * ищет таску с переданным в метод параметром uniqueId
+     * в случае успеха, возвращает таску с переданным uniqueId
+     * Вернет null в случае, если таски с указанным uniqueId нет
+     */
     @Override
     public Task getTaskById(Integer uniqueId) {
         for (Task task : tasks) {
             if (Objects.equals(task.getUniqueId(), uniqueId)) {
-                System.out.println(" ");
-                System.out.println("Задача с ID: " + uniqueId + " найдена!");
-                inMemoryHistoryManager.add(task);//добавили сохранение в историю просмотров
+                inMemoryHistoryManager.add(task);
                 return task;
             }
         }
         return null;
     }
 
+    /**
+     * Получение эпика по ID;
+     * метод пробегается по всем эпикам,
+     * ищет эпик с переданным в метод параметром uniqueId
+     * в случае успеха, возвращает эпик с переданным uniqueId
+     * Вернет null в случае, если эпика с указанным uniqueId нет
+     */
     @Override
     public Epic getEpicById(Integer uniqueId) {
         for (Epic epic : epics) {
             if (Objects.equals(epic.getUniqueId(), uniqueId)) {
-                System.out.println(" ");
-                System.out.println("Эпик с ID: " + uniqueId + " найден!");
-                inMemoryHistoryManager.add(epic);//добавили сохранение в историю просмотров
+                inMemoryHistoryManager.add(epic);
                 return epic;
             }
         }
         return null;
     }
 
+    /**
+     * Получение сабтаски по ID;
+     * метод пробегается по всем сабтаскам,
+     * ищет сабтаску с переданным в метод параметром uniqueId
+     * в случае успеха, возвращает сабтаску с переданным uniqueId
+     * Вернет null в случае, если сабтаски с указанным uniqueId нет
+     */
     @Override
     public Subtask getSubtaskById(Integer uniqueId) {
         for (Subtask subtask : subtasks) {
             if (Objects.equals(subtask.getUniqueId(), uniqueId)) {
-                System.out.println(" ");
-                System.out.println("Подзадача с ID: " + uniqueId + " найдена!");
-                inMemoryHistoryManager.add(subtask);//добавили сохранение в историю просмотров
+                inMemoryHistoryManager.add(subtask);
                 return subtask;
             }
         }
         return null;
     }
 
+    /**
+     * Удаление таски по переданнму uniqueId
+     * метод пробегается по списку тасок, находит и удаляет таску с переданным uniqueId
+     * Upd: ТЗ-5
+     * Также, метод удаляет из истории просмотра указанную таску
+     */
     @Override
-    public void removeTask(Integer uniqueId) {
+    public void removeTaskById(Integer uniqueId) {
         for (Task task : tasks) {
             if (Objects.equals(task.getUniqueId(), uniqueId)) {
-                System.out.println(" ");
                 tasks.remove(task);
-                System.out.println("Задача с ID: " + uniqueId + " удалена!");
+                inMemoryHistoryManager.remove(uniqueId);
                 return;
             }
         }
     }
 
+    /**
+     * Удаление эпика по переданному uniqueId
+     * метод пробегается по списку эпиков, находит и удаляет эпик с переданным uniqueId
+     * Также, метод получает список id-шников сабтасок привязанных к эпику,
+     * (если таковые имеются) вызывает удаление сабтасок.
+     * Upd: ТЗ-5
+     * Вместе с этим, удаляет из истории просмотров вышеуказанный эпик и его сабтаски, соответственно
+     */
     @Override
-    public void removeEpic(Integer uniqueId) {
+    public void removeEpicById(Integer uniqueId) {
         for (Epic epic : epics) {
             if (Objects.equals(epic.getUniqueId(), uniqueId)) {
-                System.out.println(" ");
+                for (Integer integer : epic.getSubtasksIdList()) {
+                    removeSubtaskById(integer);
+                }
                 epics.remove(epic);
-                System.out.println("Эпик с ID: " + uniqueId + " удален!");
-                subtasks.removeIf(subtask -> Objects.equals(subtask.getEpicId(), uniqueId));
-                return;
+                inMemoryHistoryManager.remove(uniqueId);
             }
         }
     }
 
+    /**
+     * Удаление сабтаски по переданному uniqueId
+     * Upd: ТЗ-5
+     * также, указанный метод удалит сабтаску из истории просмотра задач
+     */
     @Override
-    public void removeSubtask(Integer uniqueId) {
+    public void removeSubtaskById(Integer uniqueId) {
         for (Subtask subtask : subtasks) {
             if (Objects.equals(subtask.getUniqueId(), uniqueId)) {
-                System.out.println(" ");
                 subtasks.remove(subtask);
-                System.out.println("Подзадача с ID: " + uniqueId + " удалена!");
+                inMemoryHistoryManager.remove(uniqueId);
                 updateStatus(subtask.getEpicId());
                 return;
             }
         }
     }
 
+    /**
+     * Поиск сабтасок привязанных к эпику по переданному параметру uniqueId
+     * возвращает List заполненный сабтасками определенного эпика,
+     * в случае если у эпика нет привязанных сабтасок, вернется пустой лист
+     */
     @Override
     public List<Subtask> getEpicsSubtasks(Integer uniqueId) {
         List<Subtask> epicsSubtasks = new ArrayList<>();
@@ -122,77 +166,95 @@ public class InMemoryTaskManager implements TaskManager {
         return epicsSubtasks;
     }
 
+    /**
+     * Принимает таску, сохраняет ее в список тасок и возвращает uniqueId, переданной таски
+     */
     @Override
     public Integer addNewTask(Task task) {
         if (task == null) {
-            System.out.println("Задачу невозможно сохранить");
             return null;
         }
-        task.setUniqueId(generateId());
+        task.setUniqueId(generateUniqueId());
         tasks.add(task);
         return task.getUniqueId();
     }
 
+    /**
+     * Принимает таску с заранее известным нам uniqueId,
+     * ищет в списке таску с таким же id, заменяет старую на новую/переданную таску
+     */
     @Override
     public void updateTask(Task newTask) {
         if (!tasks.isEmpty()) {
             for (Task task : tasks) {
                 if (Objects.equals(task.getUniqueId(), newTask.getUniqueId())) {
                     Collections.replaceAll(tasks, task, newTask);
-                    System.out.println("Задача обновлена");
                     return;
                 }
             }
         }
     }
 
+    /**
+     * Принимает эпик, сохраняет его в список эпиков и возвращает uniqueId, переданного эпика
+     */
     @Override
     public Integer addNewEpic(Epic epic) {
         if (epic == null) {
-            System.out.println("Эпик невозможно сохранить");
             return null;
         }
-        epic.setUniqueId(generateId());
+        epic.setUniqueId(generateUniqueId());
         epics.add(epic);
         return epic.getUniqueId();
     }
 
+    /**
+     * Принимает эпик с заранее известным нам uniqueId,
+     * ищет в списке эпик с таким же id, заменяет старый на новый/переданный эпик
+     */
     @Override
     public void updateEpic(Epic newEpic) {
         if (!epics.isEmpty()) {
             for (Epic epic : epics) {
                 if (Objects.equals(epic.getUniqueId(), newEpic.getUniqueId())) {
                     Collections.replaceAll(epics, epic, newEpic);
-                    System.out.println("Эпик обновлен");
                     return;
                 }
             }
         }
     }
 
+    /**
+     * Принимает сабтаску и эпик в рамках которого создана
+     * также, вызывает метод обновления статуса эпика
+     * возвращает uniqueId сабтаски
+     */
     @Override
     public Integer addNewSubtask(Subtask subtask, Epic epic) {
         int epicId = epics.indexOf(epic);
         Epic epicL = epics.get(epicId);
-        subtask.setUniqueId(generateId());
+        subtask.setUniqueId(generateUniqueId());
         subtasks.add(subtask);
-        updateStatus(subtask.getEpicId());
         epicL.addSubtaskIdToList(subtask.getUniqueId());
+        updateStatus(subtask.getEpicId());
         return subtask.getUniqueId();
     }
 
+    /**
+     * Принимает сабтаску с заранее известным нам uniqueId,
+     * ищет в списке сабтаску с таким же id, заменяет старую на новую/переданную сабтаску
+     * также, вызывает метод обновления статуса эпика
+     */
     @Override
     public void updateSubtask(Subtask newSubtask) {
         List<Subtask> checkEpic = getEpicsSubtasks(newSubtask.getEpicId());
         if (checkEpic.isEmpty()) {
-            System.out.println("Эпика к котрому вы хотите создать подзадачу нет");
             return;
         }
         if (!subtasks.isEmpty()) {
             for (Subtask subtask : subtasks) {
                 if (Objects.equals(subtask.getUniqueId(), newSubtask.getUniqueId())) {
                     Collections.replaceAll(subtasks, subtask, newSubtask);
-                    System.out.println("Подзадача обновлена");
                     updateStatus(subtask.getEpicId());
                     return;
                 }
@@ -200,12 +262,18 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    /**
+     * Наш любимый генератор uniqueId
+     */
     @Override
     //Создание Id.
-    public Integer generateId() {
+    public Integer generateUniqueId() {
         return id++;
     }
 
+    /**
+     * Обновление статуса эпика в зависимости от статуса привязанных к нему сабтасок
+     */
     @Override
     public void updateStatus(Integer uniqueId) {
         if (epics.isEmpty()) {
@@ -219,13 +287,13 @@ public class InMemoryTaskManager implements TaskManager {
                     return;
                 }
                 for (Subtask epicSubtask : epicSubtasks) {
-                    if (epicSubtask.getStatus() == Status.NEW) {
-                        epic.setStatus(Status.NEW);
-                    } else if (epicSubtask.getStatus() == Status.IN_PROGRESS && epicSubtask.getStatus() != Status.NEW
+                    if (epicSubtask.getStatus() == Status.IN_PROGRESS && epicSubtask.getStatus() != Status.NEW
                             && epicSubtask.getStatus() != Status.DONE) {
                         epic.setStatus(Status.IN_PROGRESS);
-                    } else if (epicSubtask.getStatus() == Status.DONE && epicSubtask.getStatus() != Status.IN_PROGRESS
-                            && epicSubtask.getStatus() != Status.NEW) {
+                    } else if (epicSubtask.getStatus() != Status.DONE && epicSubtask.getStatus() != Status.IN_PROGRESS
+                            && epicSubtask.getStatus() == Status.NEW) {
+                        epic.setStatus(Status.NEW);
+                    } else {
                         epic.setStatus(Status.DONE);
                     }
                 }

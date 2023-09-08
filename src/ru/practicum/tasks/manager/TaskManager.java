@@ -20,11 +20,11 @@ public interface TaskManager {
     Subtask getSubtaskById(Integer uniqueId);
 
     //Удаление по идентификатору.
-    void removeTask(Integer uniqueId);
+    void removeTaskById(Integer uniqueId);
 
-    void removeEpic(Integer uniqueId);
+    void removeEpicById(Integer uniqueId);
 
-    void removeSubtask(Integer uniqueId);
+    void removeSubtaskById(Integer uniqueId);
 
     //Получение списка всех подзадач определённого эпика.
     List<Subtask> getEpicsSubtasks(Integer uniqueId);
@@ -49,7 +49,7 @@ public interface TaskManager {
 
     //Создание Id.
 
-    Integer generateId();
+    Integer generateUniqueId();
 
     //Управление статусами осуществляется по следующему правилу:
     //Менеджер сам не выбирает статус для задачи. Информация о нём
