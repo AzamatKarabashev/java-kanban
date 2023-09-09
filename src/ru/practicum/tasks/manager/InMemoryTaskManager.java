@@ -171,12 +171,12 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public Integer addNewTask(Task task) {
-        if (task == null) {
-            return null;
+        if (task != null) {
+            task.setUniqueId(generateUniqueId());
+            tasks.add(task);
+            return task.getUniqueId();
         }
-        task.setUniqueId(generateUniqueId());
-        tasks.add(task);
-        return task.getUniqueId();
+        return null;
     }
 
     /**
@@ -200,12 +200,12 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public Integer addNewEpic(Epic epic) {
-        if (epic == null) {
-            return null;
+        if (epic != null) {
+            epic.setUniqueId(generateUniqueId());
+            epics.add(epic);
+            return epic.getUniqueId();
         }
-        epic.setUniqueId(generateUniqueId());
-        epics.add(epic);
-        return epic.getUniqueId();
+        return null;
     }
 
     /**

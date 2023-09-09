@@ -41,16 +41,15 @@ public class InMemoryHistoryManager implements HistoryManager {
      * принимает на вход таску/сабтаску/эпик
      * удаляет таску/сабтаску/эпик, если таковая уже добавлена в historyMap, лишая нас дублирования
      * вызывает метод customLinkLast и линкует* таску/сабтаску/эпик
-     * кладет в historyMap ключ uniqueId таски/сабиаски/эпика и саму таску/сабтаску/эпик
+     * кладет в historyMap ключ uniqueId таски/сабтаски/эпика и саму таску/сабтаску/эпик
      */
     @Override
     public void add(Task task) {
-        if (task == null) {
-            return;
+        if (task != null) {
+            remove(task.getUniqueId());
+            customLinkLast(task);
+            historyMap.put(task.getUniqueId(), last);
         }
-        remove(task.getUniqueId());
-        customLinkLast(task);
-        historyMap.put(task.getUniqueId(), last);
     }
 
     /**
@@ -60,10 +59,11 @@ public class InMemoryHistoryManager implements HistoryManager {
      */
     private void customLinkLast(Task task) {
         Node node = new Node(task, last, null);
-        if (first == null)
+        if (first == null) {
             first = node;
-        else
+        } else {
             last.next = node;
+        }
         last = node;
     }
 
@@ -73,9 +73,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int uniqueId) {
         Node node = historyMap.remove(uniqueId);
-        if (node == null)
-            return;
-        removeNode(node);
+        if (node != null) {
+            removeNode(node);
+        }
     }
 
     /**
@@ -100,9 +100,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private static class Node {
-        Task value;
-        Node prev;
-        Node next;
+        private final Task value;
+        private Node prev;
+        private Node next;
 
         public Node(Task value, Node prev, Node next) {
             this.value = value;

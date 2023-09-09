@@ -4,11 +4,12 @@ package ru.practicum.tasks.task;
 import ru.practicum.tasks.model.Status;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
 
-    private ArrayList<Integer> subtasksIdList;
+    private List<Integer> subtasksIdList;
 
     public Epic(String taskName, String taskDesc, Status status) {
         super(taskName, taskDesc, status);
@@ -46,11 +47,11 @@ public class Epic extends Task {
                 '}';
     }
 
-    public ArrayList<Integer> getSubtasksIdList() {
+    public List<Integer> getSubtasksIdList() {
         return subtasksIdList;
     }
 
-    public void setSubtasksIdList(ArrayList<Integer> subtasksIdList) {
+    public void setSubtasksIdList(List<Integer> subtasksIdList) {
         this.subtasksIdList = subtasksIdList;
     }
 }
