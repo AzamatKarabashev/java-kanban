@@ -1,7 +1,8 @@
 package ru.practicum.tasks.task;
 
 
-import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.manager.taskModul.TypeOfTask;
+import ru.practicum.tasks.statusModul.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,11 @@ public class Epic extends Task {
     }
 
     public Epic() {
+    }
+
+    @Override
+    public TypeOfTask getType () {
+        return TypeOfTask.EPIC;
     }
 
     public void addSubtaskIdToList(Integer uniqueId) {

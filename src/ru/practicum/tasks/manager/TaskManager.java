@@ -27,7 +27,7 @@ public interface TaskManager {
     void removeSubtaskById(Integer uniqueId);
 
     //Получение списка всех подзадач определённого эпика.
-    List<Subtask> getEpicsSubtasks(Integer uniqueId);
+    List<Subtask> getEpicSubtasks(Integer uniqueId);
 
     //Создание. Сам объект должен передаваться в качестве параметра.
     //Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.

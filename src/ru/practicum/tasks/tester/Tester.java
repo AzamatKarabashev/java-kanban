@@ -2,7 +2,7 @@ package ru.practicum.tasks.tester;
 
 import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.statusModul.Status;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
@@ -89,7 +89,7 @@ public class Tester {
         }
 
         System.out.println("\nТесты: печатаем списки подзадач привязанных к эпику.\n");
-        List<Subtask> epic1Subtasks = inMemoryTaskManager.getEpicsSubtasks(epic1Id);
+        List<Subtask> epic1Subtasks = inMemoryTaskManager.getEpicSubtasks(epic1Id);
         for (Subtask epic1Subtask : epic1Subtasks) {
             System.out.println(epic1Subtask);
             System.out.println(" ");

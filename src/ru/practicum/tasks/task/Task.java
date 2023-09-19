@@ -1,6 +1,7 @@
 package ru.practicum.tasks.task;
 
-import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.manager.taskModul.TypeOfTask;
+import ru.practicum.tasks.statusModul.Status;
 
 import java.util.Objects;
 
@@ -17,6 +18,10 @@ public class Task {
     }
 
     public Task() {
+    }
+
+    public TypeOfTask getType (){
+        return TypeOfTask.TASK;
     }
 
     @Override

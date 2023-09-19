@@ -1,7 +1,7 @@
 package ru.practicum.tasks.manager;
 
 import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.statusModul.Status;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     private List<Epic> epics = new ArrayList<>();
     private List<Subtask> subtasks = new ArrayList<>();
     private Integer id = 0;
-    private final HistoryManager inMemoryHistoryManager = getDefaultHistory();
+    protected final HistoryManager inMemoryHistoryManager = getDefaultHistory();
 
     /**
      * Метод печатает историю просмотра задач из
@@ -156,7 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
      * в случае если у эпика нет привязанных сабтасок, вернется пустой лист
      */
     @Override
-    public List<Subtask> getEpicsSubtasks(Integer uniqueId) {
+    public List<Subtask> getEpicSubtasks(Integer uniqueId) {
         List<Subtask> epicsSubtasks = new ArrayList<>();
         for (Subtask subtask : subtasks) {
             if (Objects.equals(subtask.getEpicId(), uniqueId)) {
@@ -247,7 +247,7 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void updateSubtask(Subtask newSubtask) {
-        List<Subtask> checkEpic = getEpicsSubtasks(newSubtask.getEpicId());
+        List<Subtask> checkEpic = getEpicSubtasks(newSubtask.getEpicId());
         if (checkEpic.isEmpty()) {
             return;
         }
@@ -281,7 +281,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (Epic epic : epics) {
             if (Objects.equals(epic.getUniqueId(), uniqueId)) {
-                List<Subtask> epicSubtasks = getEpicsSubtasks(uniqueId);
+                List<Subtask> epicSubtasks = getEpicSubtasks(uniqueId);
                 if (epicSubtasks.isEmpty()) {
                     epic.setStatus(Status.NEW);
                     return;

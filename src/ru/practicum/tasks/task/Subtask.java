@@ -1,6 +1,7 @@
 package ru.practicum.tasks.task;
 
-import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.manager.taskModul.TypeOfTask;
+import ru.practicum.tasks.statusModul.Status;
 
 import java.util.Objects;
 
@@ -13,6 +14,11 @@ public class Subtask extends Task {
     }
 
     public Subtask() {
+    }
+
+    @Override
+    public TypeOfTask getType () {
+        return TypeOfTask.SUBTASK;
     }
 
     public Integer getEpicId() {
