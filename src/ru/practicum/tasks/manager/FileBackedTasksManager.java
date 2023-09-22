@@ -11,6 +11,7 @@ import ru.practicum.tasks.task.Task;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +56,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 //      Проверьте, что история просмотра восстановилась верно и все задачи,
 //      эпики, подзадачи, которые были в старом, есть в новом менеджере.
 
-        String path = "C:\\Users\\Mugen\\IdeaProjects\\CSVFileTest\\COMMA-COMMA.csv";
+        String path = "C:\\Users\\Мурат\\IdeaProjects\\test\\COMMA-COMMA.csv";
         File file = new File(path);
         loadAndRestoreFromFile(file);
     }
@@ -73,44 +74,41 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static FileBackedTasksManager loadAndRestoreFromFile(File file) {
-        FileBackedTasksManager restoredFromFileManager = new FileBackedTasksManager(file);
-        String path = "C:\\Users\\Mugen\\IdeaProjects\\CSVFileTest\\COMMA-COMMA.csv";
+        final FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
         try {
-            List<String> fileContent = Files.readAllLines(Path.of(path));
-            for (String line : fileContent) {
-                if (!line.isBlank()) {
-                    if (Objects.requireNonNull(Converter.stringToTask(line)).getType().equals(TypeOfTask.TASK)) {
-                        restoredFromFileManager.addNewTask(Converter.stringToTask(line));
-                    } else if (Objects.requireNonNull(Converter.stringToTask(line)).getType().equals(TypeOfTask.EPIC)) {
-                        restoredFromFileManager.addNewEpic((Epic) Converter.stringToTask(line));
-                    } else {
-                        Subtask subtask = new Subtask();
-                        int epicId = 0;
-                        String[] partsOfLine = line.split(",");
-                        for (int i = 0; i < partsOfLine.length; i++) {
-                            subtask.setUniqueId(Integer.parseInt(partsOfLine[0]));
-                            subtask.setTaskName(partsOfLine[2]);
-                            Status status = Status.valueOf(partsOfLine[3]);
-                            subtask.setStatus(status);
-                            subtask.setTaskDesc(partsOfLine[4]);
-                            epicId = Integer.parseInt(partsOfLine[5]);
-                        }
-                        restoredFromFileManager.addNewSubtask((Subtask) Converter.stringToTask(line),
-                                restoredFromFileManager.getEpicById(epicId));
-                    }
-                } else {
-                    convertRestoredListOfHistoryInHistoryManager(Converter.historyFromStringToList(line));
+            final String csv = Files.readString(file.toPath());
+            final String[] lines = csv.split(System.lineSeparator());
+            int generatorId = 0;
+            List<Integer> history = Collections.emptyList();
+            for (int i = 1; i < lines.length; i++) {
+                String line = lines[i];
+                if (line.isEmpty()) {
+                    history = Converter.historyFromStringToList(lines[i + 1]);
+                    break;
                 }
+                final Task task = Converter.stringToTask(line);
+                final int id = task.getUniqueId();
+                if (id > generatorId) {
+                    generatorId = id;
+                }
+                taskManager.addTask(task);
+            }
+            for (Subtask subtask : taskManager.getSubtasks()) {
+                final Subtask subtask1 = subtask;
+                final Epic epic1 = taskManager.getEpicById(subtask1.getEpicId());
+                epic1.addSubtaskIdToList(subtask1.getUniqueId());
+            }
+            for (Integer taskId : history) {
+                taskManager.inMemoryHistoryManager.add(taskManager.getTask(taskId));
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new ManagerSaveException(e.getMessage());
         }
-        return restoredFromFileManager;
+        return taskManager;
     }
 
     private void createAndSaveFile() {
-        String path = "C:\\Users\\Mugen\\IdeaProjects\\CSVFileTest\\COMMA-COMMA.csv";
+        String path = "C:\\Users\\Мурат\\IdeaProjects\\test\\COMMA-COMMA.csv";
         try (FileWriter csvOutputFile = new FileWriter(path)) {
             csvOutputFile.write("id,type,name,status,description,epic\n");
             for (Task task : getTasks()) {
