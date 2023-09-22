@@ -66,11 +66,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public FileBackedTasksManager() {
-
     }
 
     public FileBackedTasksManager(File file) {
-
     }
 
     public static FileBackedTasksManager loadAndRestoreFromFile(File file) {
