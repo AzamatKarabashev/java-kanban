@@ -1,7 +1,7 @@
 package ru.practicum.tasks.task;
 
-import ru.practicum.tasks.manager.taskModul.TypeOfTask;
-import ru.practicum.tasks.statusModul.Status;
+import ru.practicum.tasks.model.TypeOfTask;
+import ru.practicum.tasks.model.Status;
 
 import java.util.Objects;
 
@@ -47,9 +47,9 @@ public class Subtask extends Task {
     public String toString() {
         return "Subtask{" +
                 "epicId=" + epicId +
-                ", taskName='" + taskName + '\'' +
-                ", taskDesc='" + taskDesc + '\'' +
-                ", uniqueId=" + uniqueId +
+                ", taskName='" + name + '\'' +
+                ", taskDesc='" + descriptions + '\'' +
+                ", uniqueId=" + id +
                 ", status=" + status +
                 '}';
     }

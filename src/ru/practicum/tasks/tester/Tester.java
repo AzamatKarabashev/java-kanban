@@ -2,7 +2,7 @@ package ru.practicum.tasks.tester;
 
 import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.statusModul.Status;
+import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
@@ -13,22 +13,22 @@ import static ru.practicum.tasks.manager.Managers.getDefault;
 public class Tester {
 
     public void taskPrinter(Task task, Integer taskId) {
-        System.out.println("Название задачи: " + task.getTaskName() + ".\n"
-                + "Описание задачи: " + task.getTaskDesc() + ".\n"
+        System.out.println("Название задачи: " + task.getName() + ".\n"
+                + "Описание задачи: " + task.getDescriptions() + ".\n"
                 + "Статус задачи: " + task.getStatus() + ".\n"
                 + "Уникальный ID задачи: " + taskId + ".\n");
     }
 
     public void epicPrinter(Epic epic, Integer epicId) {
-        System.out.println("Название эпика: " + epic.getTaskName() + ".\n"
-                + "Описание эпика: " + epic.getTaskDesc() + ".\n"
+        System.out.println("Название эпика: " + epic.getName() + ".\n"
+                + "Описание эпика: " + epic.getDescriptions() + ".\n"
                 + "Статус эпика: " + epic.getStatus() + ".\n"
                 + "Уникальный ID эпика: " + epicId + ".\n");
     }
 
     public void subtaskPrinter(Subtask subtask, Integer subtaskId) {
-        System.out.println("Название подзадачи: " + subtask.getTaskName() + ".\n"
-                + "Описание подзадачи: " + subtask.getTaskDesc() + ".\n"
+        System.out.println("Название подзадачи: " + subtask.getName() + ".\n"
+                + "Описание подзадачи: " + subtask.getDescriptions() + ".\n"
                 + "Статус подзадачи: " + subtask.getStatus() + ".\n"
                 + "ID Эпика в рамках которого создана подзадача: " + subtask.getEpicId() + ".\n"
                 + "Уникальный ID подзадачи: " + subtaskId + ".\n");
@@ -114,7 +114,7 @@ public class Tester {
         System.out.println("\nТесты: печатаем айдишники сабтасок у определенного эпика.\n");
         System.out.println("У эпика с ID: " + epic1Id + ".");
         System.out.println(" ");
-        for (Integer integer : epic1.getSubtasksIdList()) {
+        for (Integer integer : epic1.getSubtaskIds()) {
             System.out.println("Сабтаска с ID: " + integer);
             System.out.println(" ");
         }
@@ -128,11 +128,11 @@ public class Tester {
         System.out.println(" ");
         System.out.println("После удаления эпика в списке сабтасок осталось: ");
         for (Subtask subtask : inMemoryTaskManager.getSubtasks()) {
-            System.out.println("Сабтаска с ID: " + subtask.getUniqueId() + "\n");
+            System.out.println("Сабтаска с ID: " + subtask.getId() + "\n");
         }
 
         System.out.println("\nТесты: проверка обновления статуса эпика при удалении сабтасок.\n");
-        System.out.println("Для теста взяли эпик с ID: " + epic2.getUniqueId()
+        System.out.println("Для теста взяли эпик с ID: " + epic2.getId()
                 + ". его статус: " + epic2.getStatus() + "\n");
         System.out.println("Для начала мы проверим существование нужных нам для теста сабтасок.\n");
         for (Subtask subtask : inMemoryTaskManager.getSubtasks()) {
@@ -140,7 +140,7 @@ public class Tester {
         }
         List<Subtask> checkWithDebug = inMemoryTaskManager.getSubtasks();
         inMemoryTaskManager.removeSubtaskById(subtask3Id);
-        System.out.println("\nМы удалили сабтаски первого эпика с ID: " + epic2.getUniqueId()
+        System.out.println("\nМы удалили сабтаски первого эпика с ID: " + epic2.getId()
                 + ". теперь его статус: " + epic2.getStatus() + "\n");
         System.out.println();
 

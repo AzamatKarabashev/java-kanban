@@ -1,7 +1,7 @@
 package ru.practicum.tasks.manager;
 
 import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.statusModul.Status;
+import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
@@ -51,7 +51,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer uniqueId) {
         for (Task task : tasks) {
-            if (Objects.equals(task.getUniqueId(), uniqueId)) {
+            if (Objects.equals(task.getId(), uniqueId)) {
                 inMemoryHistoryManager.add(task);
                 return task;
             }
@@ -69,7 +69,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(Integer uniqueId) {
         for (Epic epic : epics) {
-            if (Objects.equals(epic.getUniqueId(), uniqueId)) {
+            if (Objects.equals(epic.getId(), uniqueId)) {
                 inMemoryHistoryManager.add(epic);
                 return epic;
             }
@@ -87,7 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer uniqueId) {
         for (Subtask subtask : subtasks) {
-            if (Objects.equals(subtask.getUniqueId(), uniqueId)) {
+            if (Objects.equals(subtask.getId(), uniqueId)) {
                 inMemoryHistoryManager.add(subtask);
                 return subtask;
             }
@@ -104,7 +104,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTaskById(Integer uniqueId) {
         for (Task task : tasks) {
-            if (Objects.equals(task.getUniqueId(), uniqueId)) {
+            if (Objects.equals(task.getId(), uniqueId)) {
                 tasks.remove(task);
                 inMemoryHistoryManager.remove(uniqueId);
                 return;
@@ -123,8 +123,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeEpicById(Integer uniqueId) {
         for (Epic epic : epics) {
-            if (Objects.equals(epic.getUniqueId(), uniqueId)) {
-                for (Integer integer : epic.getSubtasksIdList()) {
+            if (Objects.equals(epic.getId(), uniqueId)) {
+                for (Integer integer : epic.getSubtaskIds()) {
                     removeSubtaskById(integer);
                 }
                 epics.remove(epic);
@@ -141,7 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeSubtaskById(Integer uniqueId) {
         for (Subtask subtask : subtasks) {
-            if (Objects.equals(subtask.getUniqueId(), uniqueId)) {
+            if (Objects.equals(subtask.getId(), uniqueId)) {
                 subtasks.remove(subtask);
                 inMemoryHistoryManager.remove(uniqueId);
                 updateStatus(subtask.getEpicId());
@@ -172,9 +172,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer addNewTask(Task task) {
         if (task != null) {
-            task.setUniqueId(generateUniqueId());
+            task.setId(generateUniqueId());
             tasks.add(task);
-            return task.getUniqueId();
+            return task.getId();
         }
         return null;
     }
@@ -187,7 +187,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateTask(Task newTask) {
         if (!tasks.isEmpty()) {
             for (Task task : tasks) {
-                if (Objects.equals(task.getUniqueId(), newTask.getUniqueId())) {
+                if (Objects.equals(task.getId(), newTask.getId())) {
                     Collections.replaceAll(tasks, task, newTask);
                     return;
                 }
@@ -201,9 +201,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer addNewEpic(Epic epic) {
         if (epic != null) {
-            epic.setUniqueId(generateUniqueId());
+            epic.setId(generateUniqueId());
             epics.add(epic);
-            return epic.getUniqueId();
+            return epic.getId();
         }
         return null;
     }
@@ -216,7 +216,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateEpic(Epic newEpic) {
         if (!epics.isEmpty()) {
             for (Epic epic : epics) {
-                if (Objects.equals(epic.getUniqueId(), newEpic.getUniqueId())) {
+                if (Objects.equals(epic.getId(), newEpic.getId())) {
                     Collections.replaceAll(epics, epic, newEpic);
                     return;
                 }
@@ -233,11 +233,11 @@ public class InMemoryTaskManager implements TaskManager {
     public Integer addNewSubtask(Subtask subtask, Epic epic) {
         int epicId = epics.indexOf(epic);
         Epic epicL = epics.get(epicId);
-        subtask.setUniqueId(generateUniqueId());
+        subtask.setId(generateUniqueId());
         subtasks.add(subtask);
-        epicL.addSubtaskIdToList(subtask.getUniqueId());
+        epicL.addSubtaskIdToList(subtask.getId());
         updateStatus(subtask.getEpicId());
-        return subtask.getUniqueId();
+        return subtask.getId();
     }
 
     /**
@@ -253,7 +253,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         if (!subtasks.isEmpty()) {
             for (Subtask subtask : subtasks) {
-                if (Objects.equals(subtask.getUniqueId(), newSubtask.getUniqueId())) {
+                if (Objects.equals(subtask.getId(), newSubtask.getId())) {
                     Collections.replaceAll(subtasks, subtask, newSubtask);
                     updateStatus(subtask.getEpicId());
                     return;
@@ -280,7 +280,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         for (Epic epic : epics) {
-            if (Objects.equals(epic.getUniqueId(), uniqueId)) {
+            if (Objects.equals(epic.getId(), uniqueId)) {
                 List<Subtask> epicSubtasks = getEpicSubtasks(uniqueId);
                 if (epicSubtasks.isEmpty()) {
                     epic.setStatus(Status.NEW);
@@ -317,17 +317,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected Task getTask (Integer uniqueId) {
         for (Task task : tasks) {
-            if (task.getUniqueId().equals(uniqueId)) {
+            if (task.getId().equals(uniqueId)) {
                 return task;
             }
         }
         for (Epic epic : epics) {
-            if (epic.getUniqueId().equals(uniqueId)) {
+            if (epic.getId().equals(uniqueId)) {
                 return epic;
             }
         }
         for (Subtask subtask : subtasks) {
-            if (subtask.getUniqueId().equals(uniqueId)) {
+            if (subtask.getId().equals(uniqueId)) {
                 return subtask;
             }
         }

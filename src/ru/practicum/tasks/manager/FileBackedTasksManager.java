@@ -1,31 +1,34 @@
 package ru.practicum.tasks.manager;
 
 import ru.practicum.tasks.manager.exceptions.ManagerSaveException;
-import ru.practicum.tasks.manager.files.Converter;
-import ru.practicum.tasks.manager.taskModul.TypeOfTask;
-import ru.practicum.tasks.statusModul.Status;
+import ru.practicum.tasks.converter.Converter;
+import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.task.Epic;
 import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static ru.practicum.tasks.manager.Managers.getDefault;
 import static ru.practicum.tasks.manager.Managers.getDefaultHistory;
-import static ru.practicum.tasks.manager.files.Converter.historyToString;
-import static ru.practicum.tasks.manager.files.Converter.taskToString;
+import static ru.practicum.tasks.converter.Converter.historyToString;
+import static ru.practicum.tasks.converter.Converter.taskToString;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    /*
-    Для этого создайте метод static void main(String[] args)
-    в классе FileBackedTasksManager и реализуйте небольшой сценарий:
-    */
+    private File file;
+
+    private final String path = "COMMA-COMMA.csv";
+
+    public FileBackedTasksManager() {
+    }
+
+    public FileBackedTasksManager(File file) {
+        this.file = file;
+    }
 
     private void test() {
         System.out.println("Тест нового менеджера ТЗ-6: \n");
@@ -49,29 +52,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         getTaskById(task1Id);
         getEpicById(epic1Id);
         getSubtaskById(subtask1Id);
-        createAndSaveFile();
+        save();
 
 
 //      Создайте новый FileBackedTasksManager менеджер из этого же файла.
 //      Проверьте, что история просмотра восстановилась верно и все задачи,
 //      эпики, подзадачи, которые были в старом, есть в новом менеджере.
 
-        String path = "C:\\Users\\Мурат\\IdeaProjects\\test\\COMMA-COMMA.csv";
+
         File file = new File(path);
-        loadAndRestoreFromFile(file);
+        restoreFromFile(file);
     }
 
     public static void main(String[] args) {
         new FileBackedTasksManager().test();
     }
 
-    public FileBackedTasksManager() {
-    }
-
-    public FileBackedTasksManager(File file) {
-    }
-
-    public static FileBackedTasksManager loadAndRestoreFromFile(File file) {
+    public static FileBackedTasksManager restoreFromFile(File file) {
         final FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
         try {
             final String csv = Files.readString(file.toPath());
@@ -85,7 +82,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     break;
                 }
                 final Task task = Converter.stringToTask(line);
-                final int id = task.getUniqueId();
+                final int id = task.getId();
                 if (id > generatorId) {
                     generatorId = id;
                 }
@@ -94,7 +91,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             for (Subtask subtask : taskManager.getSubtasks()) {
                 final Subtask subtask1 = subtask;
                 final Epic epic1 = taskManager.getEpicById(subtask1.getEpicId());
-                epic1.addSubtaskIdToList(subtask1.getUniqueId());
+                epic1.addSubtaskIdToList(subtask1.getId());
             }
             for (Integer taskId : history) {
                 taskManager.inMemoryHistoryManager.add(taskManager.getTask(taskId));
@@ -105,8 +102,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return taskManager;
     }
 
-    private void createAndSaveFile() {
-        String path = "C:\\Users\\Мурат\\IdeaProjects\\test\\COMMA-COMMA.csv";
+    private void save() {
         try (FileWriter csvOutputFile = new FileWriter(path)) {
             csvOutputFile.write("id,type,name,status,description,epic\n");
             for (Task task : getTasks()) {
@@ -125,23 +121,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private static void convertRestoredListOfHistoryInHistoryManager(List<Integer> listOfRestoredHistory) {
-        if (!listOfRestoredHistory.isEmpty()) {
+    private static void convertRestoredListOfHistoryInHistoryManager(List<Integer> restoredHistory) {
+        if (!restoredHistory.isEmpty()) {
             TaskManager taskManager = getDefault();
             HistoryManager historyManager = getDefaultHistory();
-            for (Integer integer : listOfRestoredHistory) {
+            for (Integer integer : restoredHistory) {
                 for (Task task : taskManager.getTasks()) {
-                    if (task.getUniqueId().equals(integer)) {
+                    if (task.getId().equals(integer)) {
                         historyManager.add(task);
                     }
                 }
                 for (Epic epic : taskManager.getEpics()) {
-                    if (epic.getUniqueId().equals(integer)) {
+                    if (epic.getId().equals(integer)) {
                         historyManager.add(epic);
                     }
                 }
                 for (Subtask subtask : taskManager.getSubtasks()) {
-                    if (subtask.getUniqueId().equals(integer)) {
+                    if (subtask.getId().equals(integer)) {
                         historyManager.add(subtask);
                     }
                 }
@@ -152,21 +148,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public Integer addNewTask(Task task) {
         Integer id = super.addNewTask(task);
-        createAndSaveFile();
+        save();
         return id;
     }
 
     @Override
     public Integer addNewEpic(Epic epic) {
         Integer id = super.addNewEpic(epic);
-        createAndSaveFile();
+        save();
         return id;
     }
 
     @Override
     public Integer addNewSubtask(Subtask subtask, Epic epic) {
         Integer id = super.addNewSubtask(subtask, epic);
-        createAndSaveFile();
+        save();
         return id;
     }
 }

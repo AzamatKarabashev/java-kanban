@@ -1,8 +1,8 @@
-package ru.practicum.tasks.manager.files;
+package ru.practicum.tasks.converter;
 
 import ru.practicum.tasks.manager.HistoryManager;
-import ru.practicum.tasks.manager.taskModul.TypeOfTask;
-import ru.practicum.tasks.statusModul.Status;
+import ru.practicum.tasks.model.TypeOfTask;
+import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.task.Task;
 
 import java.util.ArrayList;
@@ -16,18 +16,18 @@ public class Converter {
 
     public static String taskToString(Task task) {
         if (task != null) {
-            return String.format("%d,%s,%s,%s,%s,", task.getUniqueId(),
-                    typeOfTaskToString(task.getType()), task.getTaskName(),
-                    typeOfStatusToString(task.getStatus()), task.getTaskDesc());
+            return String.format("%d,%s,%s,%s,%s,", task.getId(),
+                    typeOfTaskToString(task.getType()), task.getName(),
+                    typeOfStatusToString(task.getStatus()), task.getDescriptions());
         }
-        return null;
+        return "";
     }
 
     public static String historyToString(HistoryManager manager) {
         StringBuilder viewedIds = new StringBuilder();
         if (!manager.getHistory().isEmpty()) {
             for (Task task : manager.getHistory()) {
-                viewedIds.append(task.getUniqueId()+1).append(",");
+                viewedIds.append(task.getId()+1).append(",");
             }
         }
         return viewedIds.toString();
@@ -37,15 +37,11 @@ public class Converter {
         Task task = new Task();
         String[] partsOfText = text.split(",");
         for (int i = 0; i < partsOfText.length; i++) {
-            task.setUniqueId(Integer.parseInt(partsOfText[0]));
-            task.setTaskName(partsOfText[2]);
+            task.setId(Integer.parseInt(partsOfText[0]));
+            task.setName(partsOfText[2]);
             Status status = Status.valueOf(partsOfText[3]);
             task.setStatus(status);
-            task.setTaskDesc(partsOfText[4]);
-        }
-        if (task == null) {
-            System.out.println("таску не получилось заполнить");
-            return null;
+            task.setDescriptions(partsOfText[4]);
         }
         return task;
     }

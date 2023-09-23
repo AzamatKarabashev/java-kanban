@@ -1,19 +1,19 @@
 package ru.practicum.tasks.task;
 
-import ru.practicum.tasks.manager.taskModul.TypeOfTask;
-import ru.practicum.tasks.statusModul.Status;
+import ru.practicum.tasks.model.TypeOfTask;
+import ru.practicum.tasks.model.Status;
 
 import java.util.Objects;
 
 public class Task {
-    protected String taskName;
-    protected String taskDesc;
-    protected Integer uniqueId;
+    protected String name;
+    protected String descriptions;
+    protected Integer id;
     protected Status status;
 
-    public Task(String taskName, String taskDesc, Status status) {
-        this.taskName = taskName;
-        this.taskDesc = taskDesc;
+    public Task(String name, String descriptions, Status status) {
+        this.name = name;
+        this.descriptions = descriptions;
         this.status = status;
     }
 
@@ -29,47 +29,47 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(taskName, task.taskName) && Objects.equals(taskDesc, task.taskDesc)
-                && Objects.equals(uniqueId, task.uniqueId) && status == task.status;
+        return Objects.equals(name, task.name) && Objects.equals(descriptions, task.descriptions)
+                && Objects.equals(id, task.id) && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taskName, taskDesc, uniqueId, status);
+        return Objects.hash(name, descriptions, id, status);
     }
 
     @Override
     public String toString() {
         return "Task{" +
-                "taskName='" + taskName + '\'' +
-                ", taskDesc='" + taskDesc + '\'' +
-                ", uniqueId=" + uniqueId +
+                "taskName='" + name + '\'' +
+                ", taskDesc='" + descriptions + '\'' +
+                ", uniqueId=" + id +
                 ", status=" + status +
                 '}';
     }
 
-    public String getTaskName() {
-        return taskName;
+    public String getName() {
+        return name;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTaskDesc() {
-        return taskDesc;
+    public String getDescriptions() {
+        return descriptions;
     }
 
-    public void setTaskDesc(String taskDesc) {
-        this.taskDesc = taskDesc;
+    public void setDescriptions(String descriptions) {
+        this.descriptions = descriptions;
     }
 
-    public Integer getUniqueId() {
-        return uniqueId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUniqueId(int uniqueId) {
-        this.uniqueId = uniqueId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Status getStatus() {

@@ -1,4 +1,4 @@
-package ru.practicum.tasks.manager.taskModul;
+package ru.practicum.tasks.model;
 
 public enum TypeOfTask {
     TASK,
