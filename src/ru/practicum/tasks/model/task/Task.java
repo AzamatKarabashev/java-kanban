@@ -7,13 +7,13 @@ import java.util.Objects;
 
 public class Task {
     protected String name;
-    protected String descriptions;
+    protected String description;
     protected Integer id;
     protected Status status;
 
-    public Task(String name, String descriptions, Status status) {
+    public Task(String name, String description, Status status) {
         this.name = name;
-        this.descriptions = descriptions;
+        this.description = description;
         this.status = status;
     }
 
@@ -30,20 +30,20 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(name, task.name) && Objects.equals(descriptions, task.descriptions)
+        return Objects.equals(name, task.name) && Objects.equals(description, task.description)
                 && Objects.equals(id, task.id) && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, descriptions, id, status);
+        return Objects.hash(name, description, id, status);
     }
 
     @Override
     public String toString() {
         return "Task{" +
                 "taskName='" + name + '\'' +
-                ", taskDesc='" + descriptions + '\'' +
+                ", taskDesc='" + description + '\'' +
                 ", uniqueId=" + id +
                 ", status=" + status +
                 '}';
@@ -57,12 +57,12 @@ public class Task {
         this.name = name;
     }
 
-    public String getDescriptions() {
-        return descriptions;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptions(String descriptions) {
-        this.descriptions = descriptions;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getId() {

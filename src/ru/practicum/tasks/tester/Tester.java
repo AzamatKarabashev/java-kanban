@@ -14,21 +14,21 @@ public class Tester {
 
     public void taskPrinter(Task task, Integer taskId) {
         System.out.println("Название задачи: " + task.getName() + ".\n"
-                + "Описание задачи: " + task.getDescriptions() + ".\n"
+                + "Описание задачи: " + task.getDescription() + ".\n"
                 + "Статус задачи: " + task.getStatus() + ".\n"
                 + "Уникальный ID задачи: " + taskId + ".\n");
     }
 
     public void epicPrinter(Epic epic, Integer epicId) {
         System.out.println("Название эпика: " + epic.getName() + ".\n"
-                + "Описание эпика: " + epic.getDescriptions() + ".\n"
+                + "Описание эпика: " + epic.getDescription() + ".\n"
                 + "Статус эпика: " + epic.getStatus() + ".\n"
                 + "Уникальный ID эпика: " + epicId + ".\n");
     }
 
     public void subtaskPrinter(Subtask subtask, Integer subtaskId) {
         System.out.println("Название подзадачи: " + subtask.getName() + ".\n"
-                + "Описание подзадачи: " + subtask.getDescriptions() + ".\n"
+                + "Описание подзадачи: " + subtask.getDescription() + ".\n"
                 + "Статус подзадачи: " + subtask.getStatus() + ".\n"
                 + "ID Эпика в рамках которого создана подзадача: " + subtask.getEpicId() + ".\n"
                 + "Уникальный ID подзадачи: " + subtaskId + ".\n");

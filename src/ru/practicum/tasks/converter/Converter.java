@@ -20,7 +20,7 @@ public class Converter {
         if (task != null) {
             return String.format("%d,%s,%s,%s,%s,", task.getId(),
                     typeOfTaskToString(task.getType()), task.getName(),
-                    typeOfStatusToString(task.getStatus()), task.getDescriptions());
+                    typeOfStatusToString(task.getStatus()), task.getDescription());
         }
         return "";
     }
@@ -44,14 +44,14 @@ public class Converter {
                         task.setId(Integer.parseInt(tokens[0]));
                         task.setName(tokens[2]);
                         task.setStatus(Status.valueOf(tokens[3]));
-                        task.setDescriptions(tokens[4]);
+                        task.setDescription(tokens[4]);
                         return task;
                     case EPIC:
                         Epic epic = new Epic();
                         epic.setId(Integer.parseInt(tokens[0]));
                         epic.setName(tokens[2]);
                         epic.setStatus(Status.valueOf(tokens[3]));
-                        epic.setDescriptions(tokens[4]);
+                        epic.setDescription(tokens[4]);
                         return epic;
                     case SUBTASK:
                         if (tokens.length > 4) {
@@ -59,7 +59,7 @@ public class Converter {
                             subtask.setId(Integer.parseInt(tokens[0]));
                             subtask.setName(tokens[2]);
                             subtask.setStatus(Status.valueOf(tokens[3]));
-                            subtask.setDescriptions(tokens[4]);
+                            subtask.setDescription(tokens[4]);
                             subtask.setEpicId(Integer.parseInt(tokens[5]));
                             return subtask;
                         } else {
