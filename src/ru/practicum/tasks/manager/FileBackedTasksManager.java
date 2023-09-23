@@ -121,30 +121,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private static void convertRestoredListOfHistoryInHistoryManager(List<Integer> restoredHistory) {
-        if (!restoredHistory.isEmpty()) {
-            TaskManager taskManager = getDefault();
-            HistoryManager historyManager = getDefaultHistory();
-            for (Integer integer : restoredHistory) {
-                for (Task task : taskManager.getTasks()) {
-                    if (task.getId().equals(integer)) {
-                        historyManager.add(task);
-                    }
-                }
-                for (Epic epic : taskManager.getEpics()) {
-                    if (epic.getId().equals(integer)) {
-                        historyManager.add(epic);
-                    }
-                }
-                for (Subtask subtask : taskManager.getSubtasks()) {
-                    if (subtask.getId().equals(integer)) {
-                        historyManager.add(subtask);
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public Integer addNewTask(Task task) {
         Integer id = super.addNewTask(task);
