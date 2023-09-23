@@ -301,39 +301,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    protected void addTask(Task task) {
-        switch (task.getType()) {
-            case TASK:
-                tasks.add(task);
-                break;
-            case SUBTASK:
-                subtasks.add((Subtask) task);
-                break;
-            case EPIC:
-                epics.add((Epic) task);
-                break;
-        }
-    }
-
-    protected Task getTask (Integer uniqueId) {
-        for (Task task : tasks) {
-            if (task.getId().equals(uniqueId)) {
-                return task;
-            }
-        }
-        for (Epic epic : epics) {
-            if (epic.getId().equals(uniqueId)) {
-                return epic;
-            }
-        }
-        for (Subtask subtask : subtasks) {
-            if (subtask.getId().equals(uniqueId)) {
-                return subtask;
-            }
-        }
-        return null;
-    }
-
     @Override
     public List<Task> getTasks() {
         return tasks;

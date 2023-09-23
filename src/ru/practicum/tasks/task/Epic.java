@@ -1,6 +1,5 @@
 package ru.practicum.tasks.task;
 
-
 import ru.practicum.tasks.model.TypeOfTask;
 import ru.practicum.tasks.model.Status;
 
@@ -10,23 +9,22 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    private List<Integer> subtaskIds;
+    private List<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(String taskName, String taskDesc, Status status) {
         super(taskName, taskDesc, status);
-        subtaskIds = new ArrayList<>();
     }
 
     public Epic() {
     }
 
     @Override
-    public TypeOfTask getType () {
+    public TypeOfTask getType() {
         return TypeOfTask.EPIC;
     }
 
-    public void addSubtaskIdToList(Integer uniqueId) {
-        subtaskIds.add(uniqueId);
+    public void addSubtaskIdToList(Integer id) {
+        subtaskIds.add(id);
     }
 
     @Override

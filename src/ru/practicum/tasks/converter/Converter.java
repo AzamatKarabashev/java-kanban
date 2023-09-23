@@ -3,6 +3,8 @@ package ru.practicum.tasks.converter;
 import ru.practicum.tasks.manager.HistoryManager;
 import ru.practicum.tasks.model.TypeOfTask;
 import ru.practicum.tasks.model.Status;
+import ru.practicum.tasks.task.Epic;
+import ru.practicum.tasks.task.Subtask;
 import ru.practicum.tasks.task.Task;
 
 import java.util.ArrayList;
@@ -25,32 +27,57 @@ public class Converter {
 
     public static String historyToString(HistoryManager manager) {
         StringBuilder viewedIds = new StringBuilder();
-        if (!manager.getHistory().isEmpty()) {
-            for (Task task : manager.getHistory()) {
-                viewedIds.append(task.getId()+1).append(",");
-            }
+        for (Task task : manager.getHistory()) {
+            viewedIds.append(task.getId()).append(",");
         }
         return viewedIds.toString();
     }
 
-    public static Task stringToTask(String text) {
-        Task task = new Task();
-        String[] partsOfText = text.split(",");
-        for (int i = 0; i < partsOfText.length; i++) {
-            task.setId(Integer.parseInt(partsOfText[0]));
-            task.setName(partsOfText[2]);
-            Status status = Status.valueOf(partsOfText[3]);
-            task.setStatus(status);
-            task.setDescriptions(partsOfText[4]);
+    public static Task stringToTask(String line) {
+        if (!line.equals(" ") && !line.equals("")) {
+            String[] tokens = line.split(",");
+            TypeOfTask type = TypeOfTask.valueOf(tokens[1]);
+            for (int i = 0; i < tokens.length; i++) {
+                switch (type) {
+                    case TASK:
+                        Task task = new Task();
+                        task.setId(Integer.parseInt(tokens[0]));
+                        task.setName(tokens[2]);
+                        task.setStatus(Status.valueOf(tokens[3]));
+                        task.setDescriptions(tokens[4]);
+                        return task;
+                    case EPIC:
+                        Epic epic = new Epic();
+                        epic.setId(Integer.parseInt(tokens[0]));
+                        epic.setName(tokens[2]);
+                        epic.setStatus(Status.valueOf(tokens[3]));
+                        epic.setDescriptions(tokens[4]);
+                        return epic;
+                    case SUBTASK:
+                        if (tokens.length > 4) {
+                            Subtask subtask = new Subtask();
+                            subtask.setId(Integer.parseInt(tokens[0]));
+                            subtask.setName(tokens[2]);
+                            subtask.setStatus(Status.valueOf(tokens[3]));
+                            subtask.setDescriptions(tokens[4]);
+                            subtask.setEpicId(Integer.parseInt(tokens[5]));
+                            return subtask;
+                        } else {
+                            break;
+                        }
+                }
+            }
         }
-        return task;
+        return null;
     }
 
     public static List<Integer> historyFromStringToList(String value) {
         List<Integer> listFilledWithIds = new ArrayList<>();
-        String[] listOfViewed = value.split(",");
-        for (String s : listOfViewed) {
-            listFilledWithIds.add(Integer.parseInt(s));
+        if (!value.isEmpty()) {
+            String[] listOfViewed = value.split(",");
+            for (String s : listOfViewed) {
+                listFilledWithIds.add(Integer.parseInt(s));
+            }
         }
         return listFilledWithIds;
     }
@@ -61,7 +88,7 @@ public class Converter {
                 return type.toString();
             }
         }
-        return null;
+        return "";
     }
 
     public static String typeOfStatusToString(Status status) {
@@ -70,6 +97,6 @@ public class Converter {
                 return status.toString();
             }
         }
-        return null;
+        return "";
     }
 }

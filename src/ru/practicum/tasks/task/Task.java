@@ -18,9 +18,10 @@ public class Task {
     }
 
     public Task() {
+
     }
 
-    public TypeOfTask getType (){
+    public TypeOfTask getType() {
         return TypeOfTask.TASK;
     }
 
