@@ -1,6 +1,6 @@
 package ru.practicum.tasks.manager;
 
-import ru.practicum.tasks.task.Task;
+import ru.practicum.tasks.model.task.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;

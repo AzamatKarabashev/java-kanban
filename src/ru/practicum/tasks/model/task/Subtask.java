@@ -1,4 +1,4 @@
-package ru.practicum.tasks.task;
+package ru.practicum.tasks.model.task;
 
 import ru.practicum.tasks.model.TypeOfTask;
 import ru.practicum.tasks.model.Status;

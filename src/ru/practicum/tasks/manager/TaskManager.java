@@ -1,8 +1,8 @@
 package ru.practicum.tasks.manager;
 
-import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.task.Subtask;
-import ru.practicum.tasks.task.Task;
+import ru.practicum.tasks.model.task.Epic;
+import ru.practicum.tasks.model.task.Subtask;
+import ru.practicum.tasks.model.task.Task;
 
 import java.util.List;
 

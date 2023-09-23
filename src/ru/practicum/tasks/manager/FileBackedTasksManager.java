@@ -2,9 +2,9 @@ package ru.practicum.tasks.manager;
 
 import ru.practicum.tasks.manager.exceptions.ManagerSaveException;
 import ru.practicum.tasks.model.Status;
-import ru.practicum.tasks.task.Epic;
-import ru.practicum.tasks.task.Subtask;
-import ru.practicum.tasks.task.Task;
+import ru.practicum.tasks.model.task.Epic;
+import ru.practicum.tasks.model.task.Subtask;
+import ru.practicum.tasks.model.task.Task;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -54,7 +54,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 //      эпики, подзадачи, которые были в старом, есть в новом менеджере.
 
         File file = new File(path);
-
         FileBackedTasksManager testRestoredOne = restoreFromFile(file);
         System.out.println("\nТест работы: история просмотра \n");
         for (Task task : testRestoredOne.inMemoryHistoryManager.getHistory()) {
@@ -72,6 +71,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (Subtask subtask : testRestoredOne.getSubtasks()) {
             System.out.println(subtask);
         }
+
     }
 
     public static void main(String[] args) {
@@ -114,6 +114,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException(e.getMessage());
         }
+        taskManager.save();
         return taskManager;
     }
 
@@ -157,6 +158,63 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
             }
         }
+    }
+
+    @Override
+    public Task getTaskById(Integer uniqueId) {
+        Task task = super.getTaskById(uniqueId);
+        save();
+        return task;
+    }
+
+    @Override
+    public Epic getEpicById(Integer uniqueId) {
+        Epic epic = super.getEpicById(uniqueId);
+        save();
+        return epic;
+    }
+
+    @Override
+    public Subtask getSubtaskById(Integer uniqueId) {
+        Subtask subtask = super.getSubtaskById(uniqueId);
+        save();
+        return subtask;
+    }
+
+    @Override
+    public void removeTaskById(Integer uniqueId) {
+        super.removeTaskById(uniqueId);
+        save();
+    }
+
+    @Override
+    public void removeEpicById(Integer uniqueId) {
+        super.removeEpicById(uniqueId);
+        save();
+    }
+
+    @Override
+    public void removeSubtaskById(Integer uniqueId) {
+        super.removeSubtaskById(uniqueId);
+        save();
+    }
+
+    @Override
+    public void updateTask(Task newTask) {
+        super.updateTask(newTask);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic newEpic) {
+        super.updateEpic(newEpic);
+        save();
+    }
+
+    @Override
+    public void updateSubtask(Subtask newSubtask) {
+        super.updateSubtask(newSubtask);
+        save();
     }
 
     @Override
