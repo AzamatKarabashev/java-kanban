@@ -12,8 +12,6 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.practicum.tasks.manager.Managers.getDefault;
-import static ru.practicum.tasks.manager.Managers.getDefaultHistory;
 import static ru.practicum.tasks.converter.Converter.historyToString;
 import static ru.practicum.tasks.converter.Converter.taskToString;
 
