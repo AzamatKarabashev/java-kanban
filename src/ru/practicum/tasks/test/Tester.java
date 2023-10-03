@@ -1,4 +1,4 @@
-package ru.practicum.tasks.tester;
+package ru.practicum.tasks.test;
 
 import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.model.task.Epic;

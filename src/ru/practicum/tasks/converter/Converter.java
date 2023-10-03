@@ -17,12 +17,14 @@ public class Converter {
     }
 
     public static String taskToString(Task task) {
-        if (task != null) {
+        try {
             return String.format("%d,%s,%s,%s,%s,", task.getId(),
                     typeOfTaskToString(task.getType()), task.getName(),
                     typeOfStatusToString(task.getStatus()), task.getDescription());
         }
-        return "";
+        catch (NullPointerException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String historyToString(HistoryManager manager) {
@@ -34,7 +36,7 @@ public class Converter {
     }
 
     public static Task stringToTask(String line) {
-        if (!line.equals(" ") && !line.equals("")) {
+        if (!line.isBlank() && !line.isEmpty()) {
             String[] tokens = line.split(",");
             TypeOfTask type = TypeOfTask.valueOf(tokens[1]);
             for (int i = 0; i < tokens.length; i++) {
@@ -54,7 +56,7 @@ public class Converter {
                         epic.setDescription(tokens[4]);
                         return epic;
                     case SUBTASK:
-                        if (tokens.length > 4) {
+                        if (tokens.length > 5) {
                             Subtask subtask = new Subtask();
                             subtask.setId(Integer.parseInt(tokens[0]));
                             subtask.setName(tokens[2]);

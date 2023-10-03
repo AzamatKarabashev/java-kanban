@@ -47,7 +47,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         getTaskById(task1Id);
         getEpicById(epic1Id);
         getSubtaskById(subtask2Id);
-        save();
+
 
 //      Создайте новый FileBackedTasksManager менеджер из этого же файла.
 //      Проверьте, что история просмотра восстановилась верно и все задачи,
@@ -71,7 +71,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (Subtask subtask : testRestoredOne.getSubtasks()) {
             System.out.println(subtask);
         }
-
     }
 
     public static void main(String[] args) {
@@ -98,8 +97,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                                 break;
                             case SUBTASK:
                                 Subtask subtask = (Subtask) stringToTask(line);
-                                Epic subtasksEpic = taskManager.getEpicById(subtask.getEpicId());
-                                if (subtasksEpic != null) {
+                                if (subtask != null) {
+                                    Epic subtasksEpic = taskManager.getEpicById(subtask.getEpicId());
                                     taskManager.addNewSubtask(subtask, subtasksEpic);
                                 }
                                 break;
@@ -236,5 +235,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Integer id = super.addNewSubtask(subtask, epic);
         save();
         return id;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 }
