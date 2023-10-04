@@ -73,7 +73,7 @@ public class Epic extends Task {
     public void calculateDurationTimeForEpic() {
         for (Subtask subtask : Managers.getDefaultInMemory().getEpicSubtasksByEpicId(id)) {
             if (duration != null && subtask.duration != null) {
-                duration.plus(subtask.duration);
+                duration = duration.plus(subtask.duration);
             }
         }
     }
