@@ -8,23 +8,25 @@ import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.time.Month;
 
+import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.practicum.tasks.model.Status.*;
 
 public abstract class TaskManagerTest {
 
-    TaskManager manager;
-    Task task1 = new Task("Task1", "DescriptionTask1", NEW);
-    Task task2 = new Task("Task2", "DescriptionTask2", IN_PROGRESS);
-    Epic epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
-    Epic epic2 = new Epic("Epic2", "DescriptionEpic2", NEW);
-    Subtask subtask1 = new Subtask("Subtask1", "DescriptionSubtask1", IN_PROGRESS, epic1.getId());
-    Subtask subtask2 = new Subtask("Subtask2", "DescriptionSubtask2", DONE, epic1.getId());
+    protected TaskManager manager;
+    protected Task task1 = new Task("Task1", "DescriptionTask1", NEW);
+    protected Task task2 = new Task("Task2", "DescriptionTask2", NEW);
+    protected Epic epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
+    protected Epic epic2 = new Epic("Epic2", "DescriptionEpic2", NEW);
+    protected Subtask subtask1 = new Subtask("Subtask1", "DescriptionSubtask1", NEW, epic1.getId());
+    protected Subtask subtask2 = new Subtask("Subtask2", "DescriptionSubtask2", NEW, epic1.getId());
 
     @BeforeEach
-    public void createClassExemplar() {
+    public void setUp() {
         manager = Managers.getDefaultInMemory();
     }
 
@@ -41,9 +43,9 @@ public abstract class TaskManagerTest {
         assertFalse(manager.getSubtasks().isEmpty());
         assertFalse(manager.getPrioritizedTasks().isEmpty());
         manager.removeAllTasks();
-        assertEquals(Collections.emptyList(), manager.getTasks());
-        assertEquals(Collections.emptyList(), manager.getEpics());
-        assertEquals(Collections.emptyList(), manager.getSubtasks());
+        assertEquals(emptyList(), manager.getTasks());
+        assertEquals(emptyList(), manager.getEpics());
+        assertEquals(emptyList(), manager.getSubtasks());
         assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
 
@@ -76,7 +78,7 @@ public abstract class TaskManagerTest {
         manager.addNewTask(task1);
         assertNotNull(manager.getTaskById(task1.getId()));
         manager.removeTaskById(task1.getId());
-        assertEquals(Collections.emptyList(), manager.getTasks());
+        assertEquals(emptyList(), manager.getTasks());
         assertNull(manager.getTaskById(task1.getId()));
         assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
@@ -86,7 +88,7 @@ public abstract class TaskManagerTest {
         manager.addNewEpic(epic1);
         assertNotNull(manager.getEpicById(epic1.getId()));
         manager.removeEpicById(epic1.getId());
-        assertEquals(Collections.emptyList(), manager.getEpics());
+        assertEquals(emptyList(), manager.getEpics());
         assertNull(manager.getEpicById(epic1.getId()));
         assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
@@ -99,7 +101,7 @@ public abstract class TaskManagerTest {
         assertNotNull(manager.getSubtaskById(subtask1.getId()));
         manager.removeSubtaskById(subtask1.getId());
         assertFalse(manager.getEpics().isEmpty());
-        assertEquals(Collections.emptyList(), manager.getSubtasks());
+        assertEquals(emptyList(), manager.getSubtasks());
         assertNull(manager.getSubtaskById(subtask1.getId()));
         assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
@@ -208,9 +210,9 @@ public abstract class TaskManagerTest {
         manager.addNewEpic(testEpic1);
         assertEquals(NEW, testEpic1.getStatus());
         Subtask testSubtask1 = new Subtask("Test2", "Description", NEW, testEpic1.getId());
-        Subtask testSubtask2 = new Subtask("Test4", "Description", IN_PROGRESS, testEpic1.getId());
         manager.addNewSubtask(testSubtask1, testEpic1);
         assertEquals(NEW, testEpic1.getStatus());
+        Subtask testSubtask2 = new Subtask("Test4", "Description", IN_PROGRESS, testEpic1.getId());
         manager.addNewSubtask(testSubtask2, testEpic1);
         assertEquals(IN_PROGRESS, testEpic1.getStatus());
         testSubtask1.setStatus(DONE);
@@ -219,7 +221,45 @@ public abstract class TaskManagerTest {
         assertEquals(DONE, testEpic1.getStatus());
     }
 
+    @Test
+    public void whenGetTasks_thenReturnListFillOfTasks() {
+        assertEquals(emptyList(), manager.getTasks());
+        manager.addNewTask(task1);
+        manager.addNewTask(task2);
+        assertEquals(2, manager.getTasks().size());
+    }
 
+    @Test
+    public void whenGetEpics_thenReturnListFillOfEpics() {
+        assertEquals(emptyList(), manager.getEpics());
+        manager.addNewEpic(epic1);
+        manager.addNewEpic(epic2);
+        assertEquals(2, manager.getEpics().size());
+    }
 
+    @Test
+    public void whenGetSubtasks_thenReturnListFillOfSubtasks() {
+        manager.addNewEpic(epic1);
+        assertEquals(emptyList(), manager.getSubtasks());
+        manager.addNewSubtask(subtask1, epic1);
+        manager.addNewSubtask(subtask2, epic1);
+        assertEquals(2, manager.getSubtasks().size());
+    }
 
+    @Test
+    public void whenGetPrioritizedTasks_thenReturnTreeSetFillOfTasks() {
+        task1.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 4, 21, 59));
+        task2.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 4, 22, 30));
+        epic1.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 3, 20, 10));
+        assertTrue(manager.getPrioritizedTasks().isEmpty());
+        manager.addNewTask(task1);
+        assertEquals(1, manager.getPrioritizedTasks().size());
+        manager.addNewTask(task2);
+        manager.addNewEpic(epic1);
+        assertEquals(3, manager.getPrioritizedTasks().size());
+        for (Task prioritizedTask : manager.getPrioritizedTasks()) {
+            assertEquals(epic1, prioritizedTask);
+            return;
+        }
+    }
 }

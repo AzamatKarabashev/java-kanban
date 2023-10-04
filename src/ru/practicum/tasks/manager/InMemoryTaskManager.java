@@ -142,6 +142,10 @@ public class InMemoryTaskManager implements TaskManager {
                 inMemoryHistoryManager.remove(uniqueId);
                 updateStatus(subtask.getEpicId());
                 prioritizedTasks.remove(subtask);
+                if (subtask.getStartTime() != null && subtask.getDuration() != null) {
+                    epics.get(subtask.getEpicId()).calculateStartTimeForEpic();
+                    epics.get(subtask.getEpicId()).calculateDurationTimeForEpic();
+                }
                 return;
             }
         }
@@ -241,6 +245,10 @@ public class InMemoryTaskManager implements TaskManager {
             epic.addSubtaskIdToList(subtask.getId());
             updateStatus(subtask.getEpicId());
             prioritizedTasks.add(subtask);
+            if (subtask.getStartTime() != null && subtask.getDuration() != null) {
+                epics.get(subtask.getEpicId()).calculateStartTimeForEpic();
+                epics.get(subtask.getEpicId()).calculateDurationTimeForEpic();
+            }
             return subtask.getId();
         }
         return null;
@@ -264,6 +272,10 @@ public class InMemoryTaskManager implements TaskManager {
                     updateStatus(subtask.getEpicId());
                     prioritizedTasks.remove(subtask);
                     prioritizedTasks.add(newSubtask);
+                    if (subtask.getStartTime() != null && subtask.getDuration() != null) {
+                        epics.get(subtask.getEpicId()).calculateStartTimeForEpic();
+                        epics.get(subtask.getEpicId()).calculateDurationTimeForEpic();
+                    }
                     return;
                 }
             }
@@ -301,18 +313,9 @@ public class InMemoryTaskManager implements TaskManager {
                     } else if (epicSubtask.getStatus() != NEW && epicSubtask.getStatus() == DONE
                             && epicSubtask.getStatus() != IN_PROGRESS) {
                         epic.setStatus(DONE);
-                    } else if (epicSubtask.getStatus() == NEW && epicSubtask.getStatus() != DONE
-                            && epicSubtask.getStatus() != IN_PROGRESS) {
-                        epic.setStatus(NEW);
                     } else if (epicSubtask.getStatus() != NEW && epicSubtask.getStatus() == DONE
                             && epicSubtask.getStatus() == IN_PROGRESS) {
                         epic.setStatus(IN_PROGRESS);
-                    } else if (epicSubtask.getStatus() == NEW && epicSubtask.getStatus() == DONE
-                            && epicSubtask.getStatus() != IN_PROGRESS) {
-                        epic.setStatus(NEW);
-                    } else if (epicSubtask.getStatus() == NEW && epicSubtask.getStatus() != DONE
-                            && epicSubtask.getStatus() == IN_PROGRESS) {
-                        epic.setStatus(NEW);
                     } else {
                         epic.setStatus(NEW);
                     }

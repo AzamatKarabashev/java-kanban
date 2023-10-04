@@ -1,11 +1,7 @@
 id,type,name,status,description,startTime,duration,epic
-0,TASK,Убраться в гараже,NEW,Уровень невозможно, добро пожаловать,null,null,
-7,TASK,Первая таска для теста менеджера истории,NEW,Описание первой тестовой таски,null,null,
-8,TASK,Вторая таска для теста менеджера истории,NEW,Описание второй тестовой таски,null,null,
-5,EPIC,Обрадовать жену,NEW,Хочешь похвалы?,null,null,
-9,EPIC,Первый эпик для теста менеджера истории с тремя сабтасками,DONE,Описание первого тестового эпика,null,null,
-13,EPIC,Второй эпик для теста менеджера истории без сабтасок,NEW,Описание первого тестового эпика,null,null,
-10,SUBTASK,Первая сабтаска эпика,DONE,Описание,null,null,9
-11,SUBTASK,Вторая сабтаска эпика,DONE,Описание,null,null,9
-12,SUBTASK,Третья сабтаска эпика,DONE,Описание,null,null,9
+0,TASK,Task1,NEW,DescriptionTask1,null,null,
+1,EPIC,Epic1,NEW,DescriptionEpic1,null,null,
+2,SUBTASK,Subtask1,NEW,DescriptionSubtask1,null,null,1
+3,SUBTASK,Subtask2,NEW,DescriptionSubtask2,null,null,1
 
+0,1,2,
