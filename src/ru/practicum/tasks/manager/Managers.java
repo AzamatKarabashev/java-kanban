@@ -10,6 +10,11 @@ public final class Managers {
         };
     }
 
+    public static TaskManager getDefaultInMemory() {
+        return new InMemoryTaskManager() {
+        };
+    }
+
     public static TaskManager getDefault() {
         return new FileBackedTasksManager() {
         };

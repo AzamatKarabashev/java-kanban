@@ -85,23 +85,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             for (int i = 1; i < lines.length; i++) {
                 String line = lines[i];
                 if (!line.isEmpty()) {
-                    Task task = stringToTask(line);
-                    if (task != null) {
+                    if (stringToTask(line).isPresent()) {
+                        Task task = stringToTask(line).get();
                         switch (task.getType()) {
-                            case TASK:
-                                taskManager.addNewTask(task);
-                                break;
-                            case EPIC:
-                                Epic epic = (Epic) stringToTask(line);
+                            case TASK -> taskManager.addNewTask(task);
+                            case EPIC -> {
+                                Epic epic = (Epic) stringToTask(line).get();
                                 taskManager.addNewEpic(epic);
-                                break;
-                            case SUBTASK:
-                                Subtask subtask = (Subtask) stringToTask(line);
-                                if (subtask != null) {
-                                    Epic subtasksEpic = taskManager.getEpicById(subtask.getEpicId());
-                                    taskManager.addNewSubtask(subtask, subtasksEpic);
-                                }
-                                break;
+                            }
+                            case SUBTASK -> {
+                                Subtask subtask = (Subtask) stringToTask(line).get();
+                                Epic subtasksEpic = taskManager.getEpicById(subtask.getEpicId());
+                                taskManager.addNewSubtask(subtask, subtasksEpic);
+                            }
                         }
                     }
                 } else {
@@ -119,7 +115,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void save() {
         try (FileWriter csvOutputFile = new FileWriter(path)) {
-            csvOutputFile.write("id,type,name,status,description,epic\n");
+            csvOutputFile.write("id,type,name,status,description,startTime,duration,epic\n");
             for (Task task : getTasks()) {
                 csvOutputFile.write(taskToString(task) + "\n");
             }

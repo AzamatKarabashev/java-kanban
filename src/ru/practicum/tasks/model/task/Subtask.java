@@ -6,6 +6,7 @@ import ru.practicum.tasks.model.Status;
 import java.util.Objects;
 
 public class Subtask extends Task {
+
     private Integer epicId;
 
     public Subtask(String name, String description, Status status, Integer epicId) {

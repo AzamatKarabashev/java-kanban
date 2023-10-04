@@ -5,10 +5,9 @@ import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
 
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
-
-    void printHistory();
 
     void removeAllTasks();
 
@@ -27,7 +26,7 @@ public interface TaskManager {
     void removeSubtaskById(Integer uniqueId);
 
     //Получение списка всех подзадач определённого эпика.
-    List<Subtask> getEpicSubtasks(Integer uniqueId);
+    List<Subtask> getEpicSubtasksByEpicId(Integer uniqueId);
 
     //Создание. Сам объект должен передаваться в качестве параметра.
     //Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
@@ -48,7 +47,6 @@ public interface TaskManager {
     void updateSubtask(Subtask newSubtask);
 
     //Создание Id.
-
     Integer generateUniqueId();
 
     //Управление статусами осуществляется по следующему правилу:
@@ -59,7 +57,6 @@ public interface TaskManager {
     //если у эпика нет подзадач или все они имеют статус NEW, то статус должен быть NEW.
     //если все подзадачи имеют статус DONE, то и эпик считается завершённым — со статусом DONE.
     //во всех остальных случаях статус должен быть IN_PROGRESS.
-
     void updateStatus(Integer uniqueId);
 
     //добавляем сюда методы get так как теперь используем интерфейс
@@ -75,5 +72,7 @@ public interface TaskManager {
     List<Subtask> getSubtasks();
 
     void setSubtasks(List<Subtask> subtasks);
+
+    TreeSet<Task> getPrioritizedTasks();
 
 }
