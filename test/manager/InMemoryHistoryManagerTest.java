@@ -1,4 +1,4 @@
-package ru.practicum.tasks.test.manager;
+package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,13 +13,16 @@ class InMemoryHistoryManagerTest {
 
     HistoryManager historyManager;
 
-    Task task1 = new Task("T1", "D1", NEW);
-    Task task2 = new Task("T2", "D2", NEW);
-    Task task3 = new Task("T3", "D3", NEW);
+    Task task1;
+    Task task2;
+    Task task3;
 
     @BeforeEach
     public void setUp() {
         historyManager = Managers.getDefaultHistory();
+        task1 = new Task("T1", "D1", NEW);
+        task2 = new Task("T2", "D2", NEW);
+        task3 = new Task("T3", "D3", NEW);
         task1.setId(1);
         task2.setId(2);
         task3.setId(3);

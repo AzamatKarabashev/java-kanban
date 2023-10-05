@@ -1,4 +1,4 @@
-package ru.practicum.tasks.test.manager;
+package manager;
 
 import org.junit.jupiter.api.Test;
 import ru.practicum.tasks.manager.FileBackedTasksManager;
@@ -8,7 +8,7 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.practicum.tasks.manager.FileBackedTasksManager.restoreFromFile;
 
-class FileBackedTasksManagerTest extends TaskManagerTest {
+class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
 
     File file = new File("COMMA-COMMA.csv");
 
@@ -30,5 +30,13 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
         assertEquals(2, restoredManager.getSubtasks().size());
         assertEquals(epic1, restoredManager.getEpicById(epic1.getId()));
         assertEquals(subtask2, restoredManager.getSubtasks().get(1));
+    }
+
+    @Test
+    public void whenCallGenerateId_thenReturnIntegerPlusOne() {
+        int id1 = manager.addNewTask(task1);
+        assertEquals(0, id1);
+        int id2 = manager.addNewEpic(epic1);
+        assertEquals(1, id2);
     }
 }

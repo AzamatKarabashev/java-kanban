@@ -46,9 +46,6 @@ public interface TaskManager {
 
     void updateSubtask(Subtask newSubtask);
 
-    //Создание Id.
-    Integer generateUniqueId();
-
     //Управление статусами осуществляется по следующему правилу:
     //Менеджер сам не выбирает статус для задачи. Информация о нём
     //приходит менеджеру вместе с информацией о самой задаче.
@@ -75,4 +72,11 @@ public interface TaskManager {
 
     TreeSet<Task> getPrioritizedTasks();
 
+    void calculateStartTimeForEpic(Integer id);
+
+    void calculateDurationTimeForEpic(Integer id);
+
+    void calculateEndTimeForEpic(Integer id);
+
+    boolean isIntersection(Task task);
 }

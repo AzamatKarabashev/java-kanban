@@ -1,33 +1,50 @@
-package ru.practicum.tasks.test.manager;
+package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.Managers;
 import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.practicum.tasks.manager.Managers.getDefaultInMemory;
 import static ru.practicum.tasks.model.Status.*;
 
-public abstract class TaskManagerTest {
+public abstract class TaskManagerTest<T extends TaskManager> {
 
     protected TaskManager manager;
-    protected Task task1 = new Task("Task1", "DescriptionTask1", NEW);
-    protected Task task2 = new Task("Task2", "DescriptionTask2", NEW);
-    protected Epic epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
-    protected Epic epic2 = new Epic("Epic2", "DescriptionEpic2", NEW);
-    protected Subtask subtask1 = new Subtask("Subtask1", "DescriptionSubtask1", NEW, epic1.getId());
-    protected Subtask subtask2 = new Subtask("Subtask2", "DescriptionSubtask2", NEW, epic1.getId());
+    protected Task task1;
+    protected Task task2;
+    protected Epic epic1;
+    protected Epic epic2;
+    protected Subtask subtask1;
+    protected Subtask subtask2;
+
+    protected void init() {
+        manager = getDefaultInMemory();
+        task1 = new Task("Task1", "DescriptionTask1", NEW);
+        task2 = new Task("Task2", "DescriptionTask2", NEW);
+        epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
+        epic2 = new Epic("Epic2", "DescriptionEpic2", NEW);
+        subtask1 = new Subtask("Subtask1", "DescriptionSubtask1", NEW, epic1.getId());
+        subtask2 = new Subtask("Subtask2", "DescriptionSubtask2", NEW, epic1.getId());
+        task1.setId(0);
+        task2.setId(1);
+        epic1.setId(2);
+        epic2.setId(3);
+        subtask1.setId(4);
+        subtask2.setId(5);
+    }
 
     @BeforeEach
     public void setUp() {
-        manager = Managers.getDefaultInMemory();
+        init();
     }
 
     @Test
@@ -197,14 +214,6 @@ public abstract class TaskManagerTest {
     }
 
     @Test
-    public void whenCallGenerateId_thenReturnIntegerPlusOne() {
-        int id1 = manager.addNewTask(task1);
-        assertEquals(0, id1);
-        int id2 = manager.addNewEpic(epic1);
-        assertEquals(1, id2);
-    }
-
-    @Test
     public void giveId_whenUpdateStatus_thenChangeEpicStatus() {
         Epic testEpic1 = new Epic("Test1", "Description", NEW);
         manager.addNewEpic(testEpic1);
@@ -261,5 +270,30 @@ public abstract class TaskManagerTest {
             assertEquals(epic1, prioritizedTask);
             return;
         }
+    }
+
+    @Test
+    public void givenStartTimeAndDuration_whenAddSubtask_thenCalculateTimeFieldsOfEpic() {
+        manager.addNewEpic(epic1);
+        subtask1.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1));
+        subtask1.setDuration(Duration.ofMinutes(59));
+        manager.addNewSubtask(subtask1, epic1);
+        assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1), epic1.getStartTime());
+        assertEquals(Duration.ofMinutes(59), epic1.getDuration());
+
+        subtask2.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1));
+        subtask2.setDuration(Duration.ofMinutes(30));
+        manager.addNewSubtask(subtask2, epic1);
+        assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1), epic1.getStartTime());
+        assertEquals(Duration.ofMinutes(89), epic1.getDuration());
+        assertTrue(manager.isIntersection(epic1));
+
+        task1.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 20));
+        task1.setDuration(Duration.ofMinutes(10));
+        manager.addNewTask(task1);
+        assertFalse(manager.isIntersection(task1));
+
+        manager.calculateEndTimeForEpic(epic1.getId());
+        assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 30), epic1.getEndTime());
     }
 }

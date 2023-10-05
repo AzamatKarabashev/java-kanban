@@ -1,6 +1,5 @@
 package ru.practicum.tasks.model.task;
 
-import ru.practicum.tasks.manager.Managers;
 import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.model.TypeOfTask;
 
@@ -60,33 +59,12 @@ public class Epic extends Task {
         return subtaskIds;
     }
 
-    public void calculateStartTimeForEpic() {
-        for (Subtask subtask : Managers.getDefaultInMemory().getEpicSubtasksByEpicId(id)) {
-            if (subtask.startTime != null) {
-                if (startTime.isBefore(subtask.startTime)) {
-                    startTime = subtask.startTime;
-                }
-            }
-        }
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
-    public void calculateDurationTimeForEpic() {
-        for (Subtask subtask : Managers.getDefaultInMemory().getEpicSubtasksByEpicId(id)) {
-            if (duration != null && subtask.duration != null) {
-                duration = duration.plus(subtask.duration);
-            }
-        }
-    }
-
-    public void calculateEndTimeForEpic() {
-        for (Subtask subtask : Managers.getDefaultInMemory().getEpicSubtasksByEpicId(id)) {
-            if (subtask.getEndTime().isPresent()) {
-                if (endTime != null) {
-                    if (endTime.isAfter(subtask.getEndTime().get())) {
-                        endTime = subtask.getEndTime().get();
-                    }
-                }
-            }
-        }
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 }

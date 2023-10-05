@@ -1,13 +1,11 @@
 package ru.practicum.tasks.model.task;
 
-import ru.practicum.tasks.manager.Managers;
 import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.model.TypeOfTask;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Task {
 
@@ -92,24 +90,7 @@ public class Task {
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        if (Managers.getDefaultInMemory().getPrioritizedTasks().isEmpty()) {
-            this.startTime = startTime;
-            return;
-        }
-        for (Task task : Managers.getDefaultInMemory().getPrioritizedTasks()) {
-            if (task.startTime == null || task.getEndTime().isEmpty()) {
-                this.startTime = startTime;
-                return;
-            }
-            if (startTime.isBefore(task.startTime) || startTime.isAfter(task.getEndTime().get())) {
-                try {
-                    this.startTime = startTime;
-                    return;
-                } catch (RuntimeException e) {
-                    throw new IllegalStateException(e);
-                }
-            }
-        }
+        this.startTime = startTime;
     }
 
     public Duration getDuration() {
@@ -120,7 +101,7 @@ public class Task {
         this.duration = duration;
     }
 
-    public Optional<LocalDateTime> getEndTime() {
-        return Optional.of(startTime.plus(duration));
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 }
