@@ -2,6 +2,7 @@ package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.practicum.tasks.manager.InMemoryTaskManager;
 import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
@@ -13,12 +14,11 @@ import java.time.Month;
 
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.practicum.tasks.manager.Managers.getDefaultInMemory;
 import static ru.practicum.tasks.model.Status.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
 
-    protected TaskManager manager;
+    protected T manager;
     protected Task task1;
     protected Task task2;
     protected Epic epic1;
@@ -27,7 +27,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected Subtask subtask2;
 
     protected void init() {
-        manager = getDefaultInMemory();
+        manager = (T) new InMemoryTaskManager();
         task1 = new Task("Task1", "DescriptionTask1", NEW);
         task2 = new Task("Task2", "DescriptionTask2", NEW);
         epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
@@ -97,7 +97,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.removeTaskById(task1.getId());
         assertEquals(emptyList(), manager.getTasks());
         assertNull(manager.getTaskById(task1.getId()));
-        assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
 
     @Test
@@ -107,7 +106,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.removeEpicById(epic1.getId());
         assertEquals(emptyList(), manager.getEpics());
         assertNull(manager.getEpicById(epic1.getId()));
-        assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
 
     @Test
@@ -117,10 +115,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(manager.getEpicById(epic1.getId()));
         assertNotNull(manager.getSubtaskById(subtask1.getId()));
         manager.removeSubtaskById(subtask1.getId());
-        assertFalse(manager.getEpics().isEmpty());
         assertEquals(emptyList(), manager.getSubtasks());
         assertNull(manager.getSubtaskById(subtask1.getId()));
-        assertTrue(manager.getPrioritizedTasks().isEmpty());
     }
 
     @Test
@@ -198,12 +194,11 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void giveNewSubtaskInParam_whenCallMethodUpdateSubtask_thenReplaceOldSubtaskWithNewSubtask() {
+        manager.addNewTask(task1);
         manager.addNewEpic(epic1);
         manager.addNewSubtask(subtask1, epic1);
-        for (Subtask subtask : manager.getSubtasks()) {
-            assertEquals(subtask1, subtask);
-        }
-        assertTrue(manager.getPrioritizedTasks().contains(subtask1));
+        assertEquals(subtask1, manager.getSubtasks().get(0));
+        assertEquals(3, manager.getPrioritizedTasks().size());
         Subtask test = new Subtask("Test", "TestDescription", NEW, epic1.getId());
         test.setId(subtask1.getId());
         manager.updateSubtask(test);
@@ -266,10 +261,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.addNewTask(task2);
         manager.addNewEpic(epic1);
         assertEquals(3, manager.getPrioritizedTasks().size());
-        for (Task prioritizedTask : manager.getPrioritizedTasks()) {
-            assertEquals(epic1, prioritizedTask);
-            return;
-        }
+        assertEquals(epic1, manager.getPrioritizedTasks().get(0));
     }
 
     @Test

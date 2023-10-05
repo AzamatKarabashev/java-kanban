@@ -99,7 +99,6 @@ public class InMemoryTaskManager implements TaskManager {
             if (Objects.equals(task.getId(), uniqueId)) {
                 tasks.remove(task);
                 inMemoryHistoryManager.remove(uniqueId);
-                prioritizedTasks.remove(task);
                 return;
             }
         }
@@ -124,7 +123,6 @@ public class InMemoryTaskManager implements TaskManager {
                 }
                 epics.remove(epic);
                 inMemoryHistoryManager.remove(uniqueId);
-                prioritizedTasks.remove(epic);
                 return;
             }
         }
@@ -142,7 +140,6 @@ public class InMemoryTaskManager implements TaskManager {
                 subtasks.remove(subtask);
                 inMemoryHistoryManager.remove(uniqueId);
                 updateStatus(subtask.getEpicId());
-                prioritizedTasks.remove(subtask);
                 calculateStartTimeForEpic(subtask.getEpicId());
                 calculateDurationTimeForEpic(subtask.getEpicId());
                 calculateEndTimeForEpic(subtask.getEpicId());
@@ -284,7 +281,7 @@ public class InMemoryTaskManager implements TaskManager {
      */
 
     //Создание Id.
-    private Integer generateUniqueId() {
+    protected Integer generateUniqueId() {
         return id++;
     }
 
@@ -322,8 +319,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public TreeSet<Task> getPrioritizedTasks() {
-        return prioritizedTasks;
+    public List<Task> getPrioritizedTasks() {
+        prioritizedTasks.addAll(tasks);
+        prioritizedTasks.addAll(epics);
+        prioritizedTasks.addAll(subtasks);
+        return new ArrayList<>(prioritizedTasks);
     }
 
     @Override

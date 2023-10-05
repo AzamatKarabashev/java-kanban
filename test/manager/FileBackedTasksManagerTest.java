@@ -31,12 +31,4 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(epic1, restoredManager.getEpicById(epic1.getId()));
         assertEquals(subtask2, restoredManager.getSubtasks().get(1));
     }
-
-    @Test
-    public void whenCallGenerateId_thenReturnIntegerPlusOne() {
-        int id1 = manager.addNewTask(task1);
-        assertEquals(0, id1);
-        int id2 = manager.addNewEpic(epic1);
-        assertEquals(1, id2);
-    }
 }

@@ -9,7 +9,7 @@ public class TaskLocalDateTimeSorter implements Comparator<Task> {
     @Override
     public int compare(Task o1, Task o2) {
         if (o1.getStartTime() == null || o2.getStartTime() == null) {
-            return o1.getStatus().compareTo(o2.getStatus());
+            return o1.getName().compareTo(o2.getName());
         }
         return o1.getStartTime().compareTo(o2.getStartTime());
     }

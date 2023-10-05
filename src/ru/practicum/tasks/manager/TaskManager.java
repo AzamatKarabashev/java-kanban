@@ -5,7 +5,6 @@ import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
 
 import java.util.List;
-import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -70,7 +69,7 @@ public interface TaskManager {
 
     void setSubtasks(List<Subtask> subtasks);
 
-    TreeSet<Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks();
 
     void calculateStartTimeForEpic(Integer id);
 
