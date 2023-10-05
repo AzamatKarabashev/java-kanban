@@ -2,7 +2,6 @@ package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.InMemoryTaskManager;
 import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
@@ -14,6 +13,7 @@ import java.time.Month;
 
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.practicum.tasks.manager.Managers.getDefaultInMemory;
 import static ru.practicum.tasks.model.Status.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
@@ -27,7 +27,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected Subtask subtask2;
 
     protected void init() {
-        manager = (T) new InMemoryTaskManager();
+        manager = (T) getDefaultInMemory();
         task1 = new Task("Task1", "DescriptionTask1", NEW);
         task2 = new Task("Task2", "DescriptionTask2", NEW);
         epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
