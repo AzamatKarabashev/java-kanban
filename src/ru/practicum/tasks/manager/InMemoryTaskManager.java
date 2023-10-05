@@ -359,6 +359,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void calculateStartTimeForEpic(Integer epicId) {
         LocalDateTime startTime;
+        List<LocalDateTime> test = new ArrayList<>();
         if (epics.isEmpty()) {
             return;
         }
@@ -370,16 +371,12 @@ public class InMemoryTaskManager implements TaskManager {
                 }
                 for (Subtask subtask : epicSubtasks) {
                     if (subtask.getStartTime() == null) {
-                        return;
+                        continue;
                     }
-                    startTime = subtask.getStartTime();
-                    epic.setStartTime(startTime);
-                    if (startTime.isBefore(subtask.getStartTime())
-                            || startTime.isEqual(subtask.getStartTime())) {
-                        startTime = subtask.getStartTime();
-                        epic.setStartTime(startTime);
-                        calculateDurationTimeForEpic(epic.getId());
-                    }
+                    test.add(subtask.getStartTime());
+                    LocalDateTime min = Collections.min(test);
+                    epic.setStartTime(min);
+                    calculateDurationTimeForEpic(epic.getId());
                 }
             }
         }
@@ -434,13 +431,11 @@ public class InMemoryTaskManager implements TaskManager {
             return true;
         }
         for (Task prioritized : getPrioritizedTasks()) {
-            if (prioritized.getStartTime() == null
-                    || prioritized.getDuration() == null
-                    || prioritized.getEndTime() == null) {
+            if (prioritized.getStartTime() == null) {
                 return true;
             }
             if (task.getStartTime().isAfter(prioritized.getStartTime())
-            || task.getEndTime().isBefore(prioritized.getEndTime())) {
+                    || task.getEndTime().isBefore(prioritized.getEndTime())) {
                 return false;
             }
         }

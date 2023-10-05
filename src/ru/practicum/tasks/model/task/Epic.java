@@ -34,24 +34,25 @@ public class Epic extends Task {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Epic epic)) return false;
         if (!super.equals(o)) return false;
-        Epic epic = (Epic) o;
-        return Objects.equals(subtaskIds, epic.subtaskIds);
+        return Objects.equals(endTime, epic.endTime) && Objects.equals(subtaskIds, epic.subtaskIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subtaskIds);
+        return Objects.hash(super.hashCode(), endTime, subtaskIds);
     }
 
     @Override
     public String toString() {
         return "Epic{" +
-                "taskName='" + name + '\'' +
-                ", taskDesc='" + description + '\'' +
-                ", uniqueId=" + id +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 

@@ -273,12 +273,12 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1), epic1.getStartTime());
         assertEquals(Duration.ofMinutes(59), epic1.getDuration());
 
-        subtask2.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1));
+        subtask2.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 1));
         subtask2.setDuration(Duration.ofMinutes(30));
         manager.addNewSubtask(subtask2, epic1);
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1), epic1.getStartTime());
         assertEquals(Duration.ofMinutes(89), epic1.getDuration());
-        assertTrue(manager.isIntersection(epic1));
+        assertFalse(manager.isIntersection(subtask1));
 
         task1.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 20));
         task1.setDuration(Duration.ofMinutes(10));
@@ -287,5 +287,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.calculateEndTimeForEpic(epic1.getId());
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 30), epic1.getEndTime());
+
+
+
+
     }
 }
