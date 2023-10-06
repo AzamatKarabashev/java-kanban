@@ -320,9 +320,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getPrioritizedTasks() {
-        prioritizedTasks.addAll(tasks);
-        prioritizedTasks.addAll(epics);
-        prioritizedTasks.addAll(subtasks);
         return new ArrayList<>(prioritizedTasks);
     }
 

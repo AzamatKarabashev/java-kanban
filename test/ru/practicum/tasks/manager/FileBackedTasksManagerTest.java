@@ -1,7 +1,7 @@
-package manager;
+package ru.practicum.tasks.manager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.FileBackedTasksManager;
 
 import java.io.File;
 
@@ -9,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.practicum.tasks.manager.FileBackedTasksManager.restoreFromFile;
 
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
+
+    @BeforeEach
+    public void setUp() {
+        init();
+    }
 
     File file = new File("COMMA-COMMA.csv");
 

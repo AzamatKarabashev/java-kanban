@@ -1,11 +1,16 @@
-package manager;
+package ru.practicum.tasks.manager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.InMemoryTaskManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+
+    @BeforeEach
+    public void setUp() {
+        init();
+    }
 
     @Test
     public void whenCallGenerateId_thenReturnIntegerPlusOne() {

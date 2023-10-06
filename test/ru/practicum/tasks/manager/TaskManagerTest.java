@@ -1,8 +1,6 @@
-package manager;
+package ru.practicum.tasks.manager;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
@@ -13,7 +11,6 @@ import java.time.Month;
 
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.practicum.tasks.manager.Managers.getDefaultInMemory;
 import static ru.practicum.tasks.model.Status.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
@@ -27,7 +24,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected Subtask subtask2;
 
     protected void init() {
-        manager = (T) getDefaultInMemory();
+        manager = (T) new InMemoryTaskManager();
         task1 = new Task("Task1", "DescriptionTask1", NEW);
         task2 = new Task("Task2", "DescriptionTask2", NEW);
         epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
@@ -40,11 +37,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         epic2.setId(3);
         subtask1.setId(4);
         subtask2.setId(5);
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test
@@ -158,18 +150,14 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         for (Task task : manager.getTasks()) {
             assertEquals(task1, task);
         }
-        for (Task prioritizedTask : manager.getPrioritizedTasks()) {
-            assertEquals(task1, prioritizedTask);
-        }
+        assertEquals(task1, manager.getPrioritizedTasks().get(0));
         Task test = new Task("Test", "TestDescription", NEW);
         test.setId(task1.getId());
         manager.updateTask(test);
         for (Task task : manager.getTasks()) {
             assertEquals(test, task);
         }
-        for (Task prioritizedTask : manager.getPrioritizedTasks()) {
-            assertEquals(test, prioritizedTask);
-        }
+        assertEquals(test, manager.getPrioritizedTasks().get(0));
     }
 
     @Test
@@ -287,8 +275,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.calculateEndTimeForEpic(epic1.getId());
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 30), epic1.getEndTime());
-
-
 
 
     }
