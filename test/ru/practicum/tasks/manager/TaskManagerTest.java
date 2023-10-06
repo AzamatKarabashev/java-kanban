@@ -24,7 +24,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected Subtask subtask2;
 
     protected void init() {
-        manager = (T) new InMemoryTaskManager();
         task1 = new Task("Task1", "DescriptionTask1", NEW);
         task2 = new Task("Task2", "DescriptionTask2", NEW);
         epic1 = new Epic("Epic1", "DescriptionEpic1", NEW);
@@ -261,7 +260,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1), epic1.getStartTime());
         assertEquals(Duration.ofMinutes(59), epic1.getDuration());
 
-        subtask2.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 1));
+        subtask2.setStartTime(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 0));
         subtask2.setDuration(Duration.ofMinutes(30));
         manager.addNewSubtask(subtask2, epic1);
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 10, 1), epic1.getStartTime());
@@ -275,7 +274,5 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.calculateEndTimeForEpic(epic1.getId());
         assertEquals(LocalDateTime.of(2023, Month.OCTOBER, 5, 11, 30), epic1.getEndTime());
-
-
     }
 }

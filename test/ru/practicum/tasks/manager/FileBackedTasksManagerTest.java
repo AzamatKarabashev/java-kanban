@@ -12,6 +12,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @BeforeEach
     public void setUp() {
+        manager = new FileBackedTasksManager();
         init();
     }
 

@@ -355,7 +355,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void calculateStartTimeForEpic(Integer epicId) {
-        LocalDateTime startTime;
         List<LocalDateTime> test = new ArrayList<>();
         if (epics.isEmpty()) {
             return;
@@ -367,13 +366,12 @@ public class InMemoryTaskManager implements TaskManager {
                     return;
                 }
                 for (Subtask subtask : epicSubtasks) {
-                    if (subtask.getStartTime() == null) {
-                        continue;
+                    if (subtask.getStartTime() != null) {
+                        test.add(subtask.getStartTime());
+                        LocalDateTime min = Collections.min(test);
+                        epic.setStartTime(min);
+                        calculateDurationTimeForEpic(epic.getId());
                     }
-                    test.add(subtask.getStartTime());
-                    LocalDateTime min = Collections.min(test);
-                    epic.setStartTime(min);
-                    calculateDurationTimeForEpic(epic.getId());
                 }
             }
         }
@@ -405,15 +403,34 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void calculateEndTimeForEpic(Integer epicId) {
+        List<LocalDateTime> test = new ArrayList<>();
+        if (epics.isEmpty()) {
+            return;
+        }
         for (Epic epic : epics) {
             if (Objects.equals(epic.getId(), epicId)) {
-                calculateStartTimeForEpic(epic.getId());
-                if (epic.getStartTime() == null || epic.getDuration() == null) {
+                List<Subtask> epicSubtasks = getEpicSubtasksByEpicId(epic.getId());
+                if (epicSubtasks.isEmpty()) {
                     return;
                 }
-                epic.setEndTime(epic.getStartTime().plus(epic.getDuration()));
+                for (Subtask subtask : epicSubtasks) {
+                    if (subtask.getEndTime() != null) {
+                        test.add(subtask.getEndTime());
+                        LocalDateTime max = Collections.max(test);
+                        epic.setEndTime(max);
+                    }
+                }
             }
         }
+//        for (Epic epic : epics) {
+//            if (Objects.equals(epic.getId(), epicId)) {
+//                calculateStartTimeForEpic(epic.getId());
+//                if (epic.getStartTime() == null || epic.getDuration() == null) {
+//                    return;
+//                }
+//                epic.setEndTime(epic.getStartTime().plus(epic.getDuration()));
+//            }
+//        }
     }
 
     @Override
