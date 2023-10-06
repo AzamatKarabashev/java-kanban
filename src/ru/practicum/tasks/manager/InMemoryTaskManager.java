@@ -19,7 +19,15 @@ public class InMemoryTaskManager implements TaskManager {
     protected List<Epic> epics = new ArrayList<>();
     protected List<Subtask> subtasks = new ArrayList<>();
     protected final HistoryManager inMemoryHistoryManager = getDefaultHistory();
-    protected final TreeSet<Task> prioritizedTasks = new TreeSet<>(new TaskLocalDateTimeSorter());
+    protected final TreeSet<Task> prioritizedTasks = new TreeSet<>(Comparator.nullsLast((o1, o2) -> {
+        if (o1.getStartTime() != null && o2.getStartTime() != null) {
+            return o1.getStartTime().compareTo(o2.getStartTime());
+        } else if (o1 == o2) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }));
 
     /**
      * Удаление всех задач/эпиков/подзадач
