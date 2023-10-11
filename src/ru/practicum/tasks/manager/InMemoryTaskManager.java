@@ -430,15 +430,6 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
-//        for (Epic epic : epics) {
-//            if (Objects.equals(epic.getId(), epicId)) {
-//                calculateStartTimeForEpic(epic.getId());
-//                if (epic.getStartTime() == null || epic.getDuration() == null) {
-//                    return;
-//                }
-//                epic.setEndTime(epic.getStartTime().plus(epic.getDuration()));
-//            }
-//        }
     }
 
     @Override
@@ -454,7 +445,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (Task prioritized : getPrioritizedTasks()) {
             if (prioritized.getStartTime() == null) {
-                return true;
+                continue;
             }
             if (task.getStartTime().isAfter(prioritized.getStartTime())
                     || task.getEndTime().isBefore(prioritized.getEndTime())) {

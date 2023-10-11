@@ -2,11 +2,13 @@ package ru.practicum.tasks.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.practicum.tasks.manager.exceptions.ManagerSaveException;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.practicum.tasks.manager.FileBackedTasksManager.restoreFromFile;
+
 
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
 
@@ -36,5 +38,15 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(2, restoredManager.getSubtasks().size());
         assertEquals(epic1, restoredManager.getEpicById(epic1.getId()));
         assertEquals(subtask2, restoredManager.getSubtasks().get(1));
+    }
+
+    @Test
+    public void giveWrongFilePath_whenTryToRestoreFromFile_thenThrowCustomException() {
+        File wrongFile = new File("NotExist.csv");
+        try {
+            FileBackedTasksManager restoredManager = restoreFromFile(wrongFile);
+        } catch (ManagerSaveException e) {
+            assertEquals("NotExist.csv", e.getMessage());
+        }
     }
 }
