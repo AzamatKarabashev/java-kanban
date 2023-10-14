@@ -1,5 +1,6 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.imp;
 
+import ru.practicum.tasks.manager.api.HistoryManager;
 import ru.practicum.tasks.model.task.Task;
 
 import java.util.ArrayList;

@@ -2,12 +2,13 @@ package ru.practicum.tasks.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.exceptions.ManagerSaveException;
+import ru.practicum.tasks.manager.exception.ManagerSaveException;
+import ru.practicum.tasks.manager.imp.FileBackedTasksManager;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.practicum.tasks.manager.FileBackedTasksManager.restoreFromFile;
+import static ru.practicum.tasks.manager.imp.FileBackedTasksManager.restoreFromFile;
 
 
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {

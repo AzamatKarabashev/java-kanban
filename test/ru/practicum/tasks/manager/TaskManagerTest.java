@@ -1,6 +1,7 @@
 package ru.practicum.tasks.manager;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.tasks.manager.api.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
@@ -208,7 +209,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(IN_PROGRESS, testEpic1.getStatus());
         testSubtask1.setStatus(DONE);
         testSubtask2.setStatus(DONE);
-        manager.updateStatus(testEpic1.getId());
+        manager.updateEpicStatus(testEpic1.getId());
         assertEquals(DONE, testEpic1.getStatus());
     }
 

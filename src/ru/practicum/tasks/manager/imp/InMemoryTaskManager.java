@@ -1,5 +1,7 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.imp;
 
+import ru.practicum.tasks.manager.api.HistoryManager;
+import ru.practicum.tasks.manager.api.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;
@@ -8,7 +10,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static ru.practicum.tasks.manager.Managers.getDefaultHistory;
+import static ru.practicum.tasks.manager.api.Managers.getDefaultHistory;
 import static ru.practicum.tasks.model.Status.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -19,7 +21,8 @@ public class InMemoryTaskManager implements TaskManager {
     protected List<Epic> epics = new ArrayList<>();
     protected List<Subtask> subtasks = new ArrayList<>();
     protected final HistoryManager inMemoryHistoryManager = getDefaultHistory();
-    protected final TreeSet<Task> prioritizedTasks = new TreeSet<>(Comparator.nullsLast((o1, o2) -> {
+
+    protected final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.nullsLast((o1, o2) -> {
         if (o1.getStartTime() != null && o2.getStartTime() != null) {
             return o1.getStartTime().compareTo(o2.getStartTime());
         } else if (o1 == o2) {
@@ -147,7 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (Objects.equals(subtask, getSubtaskById(uniqueId))) {
                 subtasks.remove(subtask);
                 inMemoryHistoryManager.remove(uniqueId);
-                updateStatus(subtask.getEpicId());
+                updateEpicStatus(subtask.getEpicId());
                 calculateStartTimeForEpic(subtask.getEpicId());
                 calculateDurationTimeForEpic(subtask.getEpicId());
                 calculateEndTimeForEpic(subtask.getEpicId());
@@ -248,7 +251,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtask.setEpicId(epic.getId());
             subtasks.add(subtask);
             epic.addSubtaskIdToList(subtask.getId());
-            updateStatus(subtask.getEpicId());
+            updateEpicStatus(subtask.getEpicId());
             prioritizedTasks.add(subtask);
             calculateStartTimeForEpic(subtask.getEpicId());
             calculateEndTimeForEpic(subtask.getEpicId());
@@ -272,7 +275,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (Subtask subtask : subtasks) {
                 if (Objects.equals(subtask.getId(), newSubtask.getId())) {
                     Collections.replaceAll(subtasks, subtask, newSubtask);
-                    updateStatus(subtask.getEpicId());
+                    updateEpicStatus(subtask.getEpicId());
                     prioritizedTasks.remove(subtask);
                     prioritizedTasks.add(newSubtask);
                     calculateStartTimeForEpic(subtask.getEpicId());
@@ -297,7 +300,7 @@ public class InMemoryTaskManager implements TaskManager {
      * Обновление статуса эпика в зависимости от статуса привязанных к нему сабтасок
      */
     @Override
-    public void updateStatus(Integer uniqueId) {
+    public void updateEpicStatus(Integer uniqueId) {
         if (epics.isEmpty()) {
             return;
         }
@@ -359,6 +362,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks = subtasks;
+    }
+
+    @Override
+    public HistoryManager getInMemoryHistoryManager() {
+        return inMemoryHistoryManager;
     }
 
     @Override

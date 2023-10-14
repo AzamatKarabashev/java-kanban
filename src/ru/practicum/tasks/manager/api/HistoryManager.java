@@ -1,4 +1,4 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.api;
 
 import ru.practicum.tasks.model.task.Task;
 

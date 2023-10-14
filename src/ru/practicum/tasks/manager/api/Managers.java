@@ -1,4 +1,6 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.api;
+
+import ru.practicum.tasks.manager.imp.InMemoryHistoryManager;
 
 public final class Managers {
 
@@ -10,14 +12,8 @@ public final class Managers {
         };
     }
 
-    public static TaskManager getDefaultInMemory() {
-        return new InMemoryTaskManager() {
-        };
-    }
-
     public static TaskManager getDefault() {
-        return new FileBackedTasksManager() {
+        return new HttpTaskManager() {
         };
     }
-
 }

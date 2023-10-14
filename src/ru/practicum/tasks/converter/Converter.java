@@ -1,6 +1,6 @@
 package ru.practicum.tasks.converter;
 
-import ru.practicum.tasks.manager.HistoryManager;
+import ru.practicum.tasks.manager.api.HistoryManager;
 import ru.practicum.tasks.model.Status;
 import ru.practicum.tasks.model.TypeOfTask;
 import ru.practicum.tasks.model.task.Epic;

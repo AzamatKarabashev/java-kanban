@@ -2,8 +2,8 @@ package ru.practicum.tasks.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.HistoryManager;
-import ru.practicum.tasks.manager.Managers;
+import ru.practicum.tasks.manager.api.HistoryManager;
+import ru.practicum.tasks.manager.api.Managers;
 import ru.practicum.tasks.model.task.Task;
 
 import static org.junit.jupiter.api.Assertions.*;

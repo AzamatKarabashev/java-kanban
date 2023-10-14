@@ -1,4 +1,4 @@
-package ru.practicum.tasks.manager.exceptions;
+package ru.practicum.tasks.manager.exception;
 
 public class ManagerSaveException extends RuntimeException {
     public ManagerSaveException (String message){

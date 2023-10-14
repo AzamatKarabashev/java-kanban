@@ -1,4 +1,4 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.api;
 
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
@@ -53,7 +53,7 @@ public interface TaskManager {
     //если у эпика нет подзадач или все они имеют статус NEW, то статус должен быть NEW.
     //если все подзадачи имеют статус DONE, то и эпик считается завершённым — со статусом DONE.
     //во всех остальных случаях статус должен быть IN_PROGRESS.
-    void updateStatus(Integer uniqueId);
+    void updateEpicStatus(Integer uniqueId);
 
     //добавляем сюда методы get так как теперь используем интерфейс
 
@@ -78,4 +78,6 @@ public interface TaskManager {
     void calculateEndTimeForEpic(Integer id);
 
     boolean isIntersection(Task task);
+
+    HistoryManager getInMemoryHistoryManager();
 }
