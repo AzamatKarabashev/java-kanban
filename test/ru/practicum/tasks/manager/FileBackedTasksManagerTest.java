@@ -10,7 +10,6 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.practicum.tasks.manager.imp.FileBackedTasksManager.restoreFromFile;
 
-
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
 
     @BeforeEach

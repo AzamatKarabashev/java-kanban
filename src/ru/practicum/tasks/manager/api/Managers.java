@@ -1,6 +1,9 @@
 package ru.practicum.tasks.manager.api;
 
+import ru.practicum.tasks.manager.imp.HttpTaskManager;
 import ru.practicum.tasks.manager.imp.InMemoryHistoryManager;
+
+import java.io.IOException;
 
 public final class Managers {
 
@@ -12,7 +15,7 @@ public final class Managers {
         };
     }
 
-    public static TaskManager getDefault() {
+    public static TaskManager getDefault() throws IOException {
         return new HttpTaskManager() {
         };
     }

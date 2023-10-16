@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import static ru.practicum.tasks.converter.Converter.*;
+import static ru.practicum.tasks.converter.CSVConverter.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
@@ -58,11 +58,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException(e.getMessage());
         }
-        taskManager.save();
         return taskManager;
     }
 
-    private void save() {
+    void save() {
         try (FileWriter csvOutputFile = new FileWriter(path)) {
             csvOutputFile.write("id,type,name,status,description,startTime,duration,epic\n");
             for (Task task : getTasks()) {
@@ -81,7 +80,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private static void convertRestoredListOfHistoryInHistoryManager(List<Integer> restoredHistory,
+    public static void convertRestoredListOfHistoryInHistoryManager(List<Integer> restoredHistory,
                                                                      FileBackedTasksManager manager) {
         if (!restoredHistory.isEmpty()) {
             for (Integer integer : restoredHistory) {
@@ -180,6 +179,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Integer id = super.addNewSubtask(subtask, epic);
         save();
         return id;
+    }
+
+    @Override
+    public void removeAllTasks() {
+        super.removeAllTasks();
+        save();
     }
 
     public File getFile() {

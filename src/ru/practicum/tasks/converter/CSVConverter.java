@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Converter {
+public class CSVConverter {
 
-    private Converter() {
+    private CSVConverter() {
 
     }
 
