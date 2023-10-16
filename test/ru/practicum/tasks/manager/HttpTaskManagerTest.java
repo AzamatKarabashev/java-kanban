@@ -23,6 +23,8 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
     public void setUp() throws IOException {
         kvServer = new KVServer();
         kvServer.start();
+        manager = new HttpTaskManager();
+        init();
     }
 
     @AfterEach
