@@ -147,6 +147,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void giveNewTaskInParam_whenCallMethodUpdateTask_thenReplaceOldTaskWithNewTask() {
         manager.addNewTask(task1);
+
         for (Task task : manager.getTasks()) {
             assertEquals(task1, task);
         }
