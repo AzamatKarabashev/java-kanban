@@ -1,7 +1,6 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.api;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.api.TaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;

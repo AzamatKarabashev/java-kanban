@@ -1,8 +1,9 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.imp.InMemoryTaskManager;
+import ru.practicum.tasks.manager.api.TaskManagerTest;
+import ru.practicum.tasks.manager.impl.InMemoryTaskManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

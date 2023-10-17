@@ -1,6 +1,6 @@
 package ru.practicum.tasks;
 
-import ru.practicum.tasks.manager.imp.HttpTaskManager;
+import ru.practicum.tasks.manager.impl.HttpTaskManager;
 import ru.practicum.tasks.manager.server.HttpTaskServer;
 import ru.practicum.tasks.manager.server.KVServer;
 

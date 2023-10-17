@@ -1,4 +1,4 @@
-package ru.practicum.tasks.manager.imp;
+package ru.practicum.tasks.manager.impl;
 
 import ru.practicum.tasks.manager.api.HistoryManager;
 import ru.practicum.tasks.model.task.Task;

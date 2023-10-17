@@ -1,5 +1,7 @@
 package ru.practicum.tasks.manager.server;
 
+import ru.practicum.tasks.manager.exception.ManagerSaveException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -26,13 +28,13 @@ public class KVTaskClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Плохой ответ, не 200, а: " + response.statusCode());
+                throw new ManagerSaveException("Плохой ответ, не 200, а: " + response.statusCode());
             }
 
             return response.body();
 
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Не получается сделать запрос");
+            throw new ManagerSaveException("Не получается сделать запрос");
         }
     }
 
@@ -46,10 +48,10 @@ public class KVTaskClient {
             HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
 
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Плохой ответ, не 200, а: " + response.statusCode());
+                throw new ManagerSaveException("Плохой ответ, не 200, а: " + response.statusCode());
             }
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Не получается сделать запрос");
+            throw new ManagerSaveException("Не получается сделать запрос");
         }
     }
 
@@ -66,11 +68,11 @@ public class KVTaskClient {
                 return " ";
             }
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Плохой ответ, не 200, а: " + response.statusCode());
+                throw new ManagerSaveException("Плохой ответ, не 200, а: " + response.statusCode());
             }
             return response.body();
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Не получается сделать запрос");
+            throw new ManagerSaveException("Не получается сделать запрос");
         }
     }
 }

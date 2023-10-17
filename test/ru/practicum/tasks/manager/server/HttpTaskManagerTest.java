@@ -1,10 +1,10 @@
-package ru.practicum.tasks.manager;
+package ru.practicum.tasks.manager.server;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.manager.imp.HttpTaskManager;
-import ru.practicum.tasks.manager.server.KVServer;
+import ru.practicum.tasks.manager.api.TaskManagerTest;
+import ru.practicum.tasks.manager.impl.HttpTaskManager;
 import ru.practicum.tasks.model.task.Epic;
 import ru.practicum.tasks.model.task.Subtask;
 import ru.practicum.tasks.model.task.Task;

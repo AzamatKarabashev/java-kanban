@@ -1,7 +1,7 @@
 package ru.practicum.tasks.manager.api;
 
-import ru.practicum.tasks.manager.imp.HttpTaskManager;
-import ru.practicum.tasks.manager.imp.InMemoryHistoryManager;
+import ru.practicum.tasks.manager.impl.HttpTaskManager;
+import ru.practicum.tasks.manager.impl.InMemoryHistoryManager;
 
 import java.io.IOException;
 
